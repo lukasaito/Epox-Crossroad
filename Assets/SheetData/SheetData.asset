@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 033110b3728d020478fe5f13056e6a87, type: 3}
+  m_Name: SheetData
+  m_EditorClassIdentifier: 
+  sheetDataRecord:
+  - Level: 1
+    HitPoint: 20
+    AttackPower: 5
+    JumpPower: 5
+  - Level: 2
+    HitPoint: 40
+    AttackPower: 10
+    JumpPower: 10
+  - Level: 3
+    HitPoint: 60
+    AttackPower: 15
+    JumpPower: 15
+  url: https://docs.google.com/spreadsheets/d/e/2PACX-1vRi9D3bla33Me0yNm_XvNcoM1VZp5pnsBBGwrTvU4R2Hv42n_-b4SQBg78WJXoQnDnuSBeCOV-BhHHh/pub?gid=1146911331&single=true&output=csv
