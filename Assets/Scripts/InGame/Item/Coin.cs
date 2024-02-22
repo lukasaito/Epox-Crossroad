@@ -9,6 +9,12 @@ public class Coin : MonoBehaviour
 
     private Vector3 normalScale = new Vector3(2.7f, 2.7f, 2.7f);
 
+    [Header("コインエフェクト")]
+    public GameObject segaCoinEffect;
+    public GameObject dsCoinEffect;
+    public GameObject switchCoinEffect;
+
+
     void Start()
     {
         this.transform.localScale = normalScale;
@@ -32,6 +38,21 @@ public class Coin : MonoBehaviour
             _cc2d.enabled = false;
             FindObjectOfType<UI_CoinCount>().coinCount++;
             Destroy(this.gameObject, 1.0f);
+
+            switch (changeCoin)
+            {
+                case 1:
+                    Instantiate(segaCoinEffect, this.transform.position, this.transform.rotation);
+                    break;
+
+                case 2:
+                    Instantiate(dsCoinEffect, this.transform.position, this.transform.rotation);
+                    break;
+
+                case 3:
+                    Instantiate(switchCoinEffect, this.transform.position, this.transform.rotation);
+                    break;
+            }
         }
     }
 }

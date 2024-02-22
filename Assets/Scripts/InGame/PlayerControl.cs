@@ -75,36 +75,34 @@ public class PlayerControl : MonoBehaviour
     {
         if (!_dead)
         {
-            h = Input.GetAxisRaw("Horizontal");
+            _inputX = Input.GetAxisRaw("Horizontal");
             _animator.SetInteger("ModelNumber", _modelNumber);
 
 
-            if (0 != h)
-            {
-                _inputX = transform.position.x;
+            _rb2d.velocity = new Vector2(_nowSpeed, _rb2d.velocity.y);
 
-                _rb2d.velocity = new Vector2(_nowSpeed, _rb2d.velocity.y);
-
+            if (0 != _inputX)
+            {              
                 _animator.SetBool("Walk", true);
 
-                if (0.3 < h || -0.3 > h)
+                if (0.3 < _inputX || -0.3 > _inputX)
                 {
-                    if (h > 0)
+                    if (_inputX > 0)
                     {
                         _nowSpeed = runSpeed;
                     }
-                    else if (h < 0)
+                    else if (_inputX < 0)
                     {
                         _nowSpeed = -runSpeed;
                     }
                 }
                 else
                 {
-                    if (h > 0)
+                    if (_inputX > 0)
                     {
                         _nowSpeed = walkSpeed;
                     }
-                    else if (h < 0)
+                    else if (_inputX < 0)
                     {
                         _nowSpeed = -walkSpeed;
                     }
@@ -112,14 +110,15 @@ public class PlayerControl : MonoBehaviour
             }
             else
             {
+                _nowSpeed = 0;
                 _animator.SetBool("Walk", false);
             }
 
-            if (h > 0)
+            if (_inputX > 0)
             {
                 _sr.flipX = false;
             }
-            else if (h < 0)
+            else if (_inputX < 0)
             {
                 _sr.flipX = true;
             }

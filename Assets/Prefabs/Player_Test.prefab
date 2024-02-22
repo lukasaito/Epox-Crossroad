@@ -103,7 +103,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 6200000, guid: d5de081438fad7344a89c9c1333a100a, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -160,6 +160,9 @@ MonoBehaviour:
   ds: {fileID: 0}
   switch_N: {fileID: 0}
   _animator: {fileID: 0}
+  _attackPower: 0
+  attackArea: {fileID: 0}
+  _hp: 0
 --- !u!95 &2136140292231196932
 Animator:
   serializedVersion: 5
