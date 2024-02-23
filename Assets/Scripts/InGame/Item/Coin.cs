@@ -36,7 +36,7 @@ public class Coin : MonoBehaviour
         {
             _sp.enabled = false;
             _cc2d.enabled = false;
-            FindObjectOfType<UI_CoinCount>().coinCount++;
+            FindObjectOfType<UI_CoinCount>().EarnCoin();
             Destroy(this.gameObject, 1.0f);
 
             switch (changeCoin)
