@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -6,14 +7,11 @@ public class PlayerMove : MonoBehaviour
     public float speed;
     public float jumpPower;
 
-    private float _inputX;
     private Rigidbody2D _rb2d;
-    private BoxCollider2D _bc2d;
     private Animator _animator;
     private SpriteRenderer _sp;
     private int _modelNumber;
 
-    private bool isFlip;
     public bool isStop;
     public bool isMoveNow; // true = 移動中 / false = 到着
     public bool plusMove;
@@ -21,21 +19,114 @@ public class PlayerMove : MonoBehaviour
 
     public GameObject stage1ToStage2;
     public GameObject stage2ToStage1;
+    public GameObject stage2ToStage3;
+    public GameObject stage3ToStage2;
+
+    public Animator stage1_PopUp;
+    public Animator stage2_PopUp;
+    public Animator stage3_PopUp;
+
 
     void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
-        _bc2d = GetComponent<BoxCollider2D>();
         _sp = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
 
         stage2ToStage1.SetActive(false);
+        stage2ToStage3.SetActive(false);
+        stage3ToStage2.SetActive(false);
     }
 
     void Update()
     {
-
         //_animator.SetInteger("ModelNumber", _modelNumber);
+
+        switch (moveCount)
+        {
+            case 0:
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
+                {
+                    SceneManager.LoadScene("StageLoading");
+                    StageLoading.loadingNumber = 0;
+                }
+                break;
+
+            case 1:
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
+                {
+                    SceneManager.LoadScene("StageLoading");
+                    StageLoading.loadingNumber = 1;
+                }
+                break;
+
+            case 2:
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
+                {
+                    SceneManager.LoadScene("StageLoading");
+                    StageLoading.loadingNumber = 2;
+                }
+                break;
+        }
+
+        // 進める
+        // 任意のボタン なおかつ 停止中の場合
+        if (Input.GetKeyDown(KeyCode.D) && isStop || Input.GetKeyDown(KeyCode.RightArrow) && isStop)
+        {
+            // 3よりも下の場合
+            if (moveCount < 3)
+            {
+                isStop = false;
+                isMoveNow = true;
+                moveCount += 1;
+                plusMove = true;
+            }
+        }
+
+        if (plusMove)
+        {
+            switch (moveCount)
+            {
+                // ステージ1 → ステージ2に進む
+                case 1:
+                    stage1ToStage2.SetActive(true);
+                    stage2ToStage1.SetActive(false);
+
+                    // 停止
+                    if (isStop)
+                    {
+                        _rb2d.velocity = new Vector2(0, 0);
+                    }
+                    // X軸プラス方向に移動
+                    else
+                    {
+                        stage1_PopUp.SetBool("isStart", false);
+                        _sp.flipX = false;
+                        _rb2d.velocity = new Vector2(speed, _rb2d.velocity.y);
+                    }
+                    break;
+
+                // ステージ2 → ステージ3に進む
+                case 2:
+                    stage2ToStage3.SetActive(true);
+                    stage3ToStage2.SetActive(false);
+
+                    // 停止
+                    if (isStop)
+                    {
+                        
+                        _rb2d.velocity = new Vector2(0, 0);
+                    }
+                    // X軸プラス方向に移動
+                    else
+                    {
+                        stage2_PopUp.SetBool("isStart", false);
+                        _sp.flipX = false;
+                        _rb2d.velocity = new Vector2(speed, _rb2d.velocity.y);
+                    }
+                    break;
+            }
+        }
 
         //戻る
         // 任意のボタン なおかつ 停止中の場合
@@ -49,15 +140,13 @@ public class PlayerMove : MonoBehaviour
                 isStop = false;
                 minusMove = true;
             }
-
-            
         }
 
         if(minusMove)
         {
             switch (moveCount)
             {
-                // ステージ2 ? ステージ1に戻る
+                // ステージ2 → ステージ1に戻る
                 case 0:
                     stage1ToStage2.SetActive(false);
                     stage2ToStage1.SetActive(true);
@@ -65,66 +154,37 @@ public class PlayerMove : MonoBehaviour
                     // 停止
                     if (isStop)
                     {
-                        Debug.Log("1");
                         _rb2d.velocity = new Vector2(0, 0);
                     }
-                    // X軸プラス方向に移動
-                    else if (!isFlip && !isStop)
+                    // X軸マイナス方向に移動
+                    else
                     {
-                        Debug.Log("2");
+                        stage2_PopUp.SetBool("isStart", false);
+                        _sp.flipX = true;
                         _rb2d.velocity = new Vector2(-speed, _rb2d.velocity.y);
                     }
-                    // X軸マイナス方向に移動
-                    else if (isFlip && !isStop)
-                    {
-                        Debug.Log("3");
-                        _rb2d.velocity = new Vector2(speed, _rb2d.velocity.y);
-                    }
                     break;
-            }
-        }
 
-        // 進める
-        // 任意のボタン なおかつ 停止中の場合
-        if (Input.GetKeyDown(KeyCode.D) && isStop || Input.GetKeyDown(KeyCode.RightArrow) &&isStop)
-        {
-            // 3よりも下の場合
-            if (moveCount < 3)
-            {
-                isStop = false;
-                isMoveNow = true;
-                moveCount += 1;
-                plusMove = true;
-            }
-        }
-
-        if(plusMove)
-        {
-            switch (moveCount)
-            {
-                // ステージ1 ? ステージ2に進む
+                // ステージ3 → ステージ2に戻る
                 case 1:
-                    stage1ToStage2.SetActive(true);
-                    stage2ToStage1.SetActive(false);
+                    stage2ToStage3.SetActive(false);
+                    stage3ToStage2.SetActive(true);
 
                     // 停止
                     if (isStop)
                     {
                         _rb2d.velocity = new Vector2(0, 0);
                     }
-                    // X軸プラス方向に移動
-                    else if (!isFlip && !isStop)
-                    {
-                        _rb2d.velocity = new Vector2(speed, _rb2d.velocity.y);
-                    }
                     // X軸マイナス方向に移動
-                    else if(isFlip && !isStop)
+                    else
                     {
+                        stage3_PopUp.SetBool("isStart", false);
+                        _sp.flipX = true;
                         _rb2d.velocity = new Vector2(-speed, _rb2d.velocity.y);
                     }
                     break;
             }
-        } 
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -134,71 +194,39 @@ public class PlayerMove : MonoBehaviour
         {
             _rb2d.AddForce(jumpPower * transform.up, ForceMode2D.Impulse);
         }
-        // 触れたらジャンプ
-        if (collision.gameObject.name == "JumpUpPoint_Area1")
-        {
-            jumpPower += 10.5f;
-            _rb2d.AddForce(jumpPower * transform.up, ForceMode2D.Impulse);
-        }
 
         
-
-        // 触れたら速度・跳躍アップ
-        if (collision.gameObject.name == "JumpPoint&Flip_Area1")
-        {
-            // 反転している時は無し
-            if(!isFlip)
-            {
-                speed += 4.5f;
-                jumpPower += 5.5f;
-                _rb2d.AddForce(jumpPower * transform.up, ForceMode2D.Impulse);
-            }
-            // 反転状態を元に戻す
-            else
-            {
-                isFlip = false;
-                _sp.flipX = false;
-            }
-        }
-
         // ステージ1 到着
         if (collision.gameObject.name == "StopPoint_Area1")
         {
+            stage1_PopUp.SetBool("isStart", true);
             _rb2d.velocity = new Vector2(0, 0);
             isMoveNow = false;
             isStop = true;
+            minusMove = false;
         }
 
         // ステージ2 到着
         if (collision.gameObject.name == "StopPoint_Area2")
         {
-            Debug.Log("ステージ2");
+            stage2_PopUp.SetBool("isStart", true);
             _rb2d.velocity = new Vector2(0, 0);
             isMoveNow = false;
             isStop = true;
             plusMove = false;
-        }   
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.name == "JumpPoint&Flip_Area1")
-        {
-            // 反転していない時
-            if(!isFlip)
-            {
-                isFlip = true;　　　// 反転フラグON
-                speed -= 4.5f;
-                jumpPower -= 5.5f;
-                _sp.flipX = true;  // 反転させる
-            }
+            minusMove = false;
         }
 
-        // 触れたらジャンプ
-        if (collision.gameObject.name == "JumpUpPoint_Area1")
+        // ステージ3 到着
+        if (collision.gameObject.name == "StopPoint_Area3")
         {
-            jumpPower -= 10.5f;
-            
+            stage3_PopUp.SetBool("isStart", true);
+            _rb2d.velocity = new Vector2(0, 0);
+            isMoveNow = false;
+            isStop = true;
+            plusMove = false;
+            minusMove = false;
         }
     }
+
 }
