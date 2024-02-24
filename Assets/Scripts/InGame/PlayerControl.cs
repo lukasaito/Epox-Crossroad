@@ -256,18 +256,15 @@ public class PlayerControl : MonoBehaviour
         if(collision.CompareTag("Key"))
         {
             keyF = true;
-
-            Destroy(collision.gameObject);
         }
 
         if(collision.CompareTag("Door"))
         {
             if(keyF)
             {
-                SceneManager.LoadScene("Stage_02");
+                FindObjectOfType<CloseDoor>().isOpenDoor = true;
             }
         }
-
 
         if (collision.gameObject.CompareTag("Boss_Bullet"))
         {
