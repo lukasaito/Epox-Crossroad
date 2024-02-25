@@ -5,6 +5,7 @@ public class Coin : MonoBehaviour
     private SpriteRenderer _sp;
     private CircleCollider2D _cc2d;
     private Animator _animator;
+    private AudioSource _audioSource;
     public int changeCoin;
 
     private Vector3 normalScale = new Vector3(2.7f, 2.7f, 2.7f);
@@ -22,6 +23,7 @@ public class Coin : MonoBehaviour
         _sp = GetComponent<SpriteRenderer>();
         _cc2d = GetComponent<CircleCollider2D>();
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -34,6 +36,7 @@ public class Coin : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
+            _audioSource.Play();
             _sp.enabled = false;
             _cc2d.enabled = false;
             FindObjectOfType<UI_CoinCount>().EarnCoin();

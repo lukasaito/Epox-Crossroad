@@ -228,5 +228,4 @@ public class PlayerMove : MonoBehaviour
             minusMove = false;
         }
     }
-
 }
