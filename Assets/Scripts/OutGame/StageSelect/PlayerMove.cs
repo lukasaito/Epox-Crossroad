@@ -11,6 +11,8 @@ public class PlayerMove : MonoBehaviour
     private Animator _animator;
     private SpriteRenderer _sp;
     private int _modelNumber;
+    private bool nextScene;
+    private float nextSceneTime;
 
     public bool isStop;
     public bool isMoveNow; // true = 移動中 / false = 到着
@@ -26,6 +28,12 @@ public class PlayerMove : MonoBehaviour
     public Animator stage2_PopUp;
     public Animator stage3_PopUp;
 
+    public float minusVolume;
+    public AudioSource stageSelectBgm;
+
+    public Animator maskPlayer;
+
+    public AudioSource pressKeySound;
 
     void Start()
     {
@@ -42,31 +50,39 @@ public class PlayerMove : MonoBehaviour
     {
         //_animator.SetInteger("ModelNumber", _modelNumber);
 
-        switch (moveCount)
+        // 遷移状態
+        if(nextScene)
         {
-            case 0:
-                if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
-                {
-                    SceneManager.LoadScene("StageLoading");
-                    StageLoading.loadingNumber = 0;
-                }
-                break;
+            pressKeySound.Play();
+            maskPlayer.SetBool("isStart", true);
+            nextSceneTime += Time.deltaTime;
 
-            case 1:
-                if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
+            if(nextSceneTime > 2.0f)
+            {
+                switch (moveCount)
                 {
-                    SceneManager.LoadScene("StageLoading");
-                    StageLoading.loadingNumber = 1;
-                }
-                break;
+                    case 0:
+                        SceneManager.LoadScene("StageLoading");
+                        StageLoading.loadingNumber = 0;
+                        break;
 
-            case 2:
-                if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
-                {
-                    SceneManager.LoadScene("StageLoading");
-                    StageLoading.loadingNumber = 2;
+                    case 1:
+                        SceneManager.LoadScene("StageLoading");
+                        StageLoading.loadingNumber = 1;
+                        break;
+
+                    case 2:
+                        SceneManager.LoadScene("StageLoading");
+                        StageLoading.loadingNumber = 2;
+                        break;
                 }
-                break;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
+        {
+            // 遷移状態にする。
+            nextScene = true;
         }
 
         // 進める
@@ -195,7 +211,6 @@ public class PlayerMove : MonoBehaviour
             _rb2d.AddForce(jumpPower * transform.up, ForceMode2D.Impulse);
         }
 
-        
         // ステージ1 到着
         if (collision.gameObject.name == "StopPoint_Area1")
         {

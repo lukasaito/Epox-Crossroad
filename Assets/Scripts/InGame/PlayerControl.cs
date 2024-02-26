@@ -17,8 +17,6 @@ public class PlayerControl : MonoBehaviour
     private SpriteRenderer _sr;
     private BoxCollider2D _bc2d;
 
-    private float h;
-
     [SerializeField]
     private float _jumpPower;
     [SerializeField]
@@ -60,9 +58,17 @@ public class PlayerControl : MonoBehaviour
         _animator = GetComponent<Animator>();
         level = 1;
 
-        sega.SetActive(false);
-        ds.SetActive(false);
-        switch_N.SetActive(false);
+        if(SceneManager.GetActiveScene().name == "Tutorial")
+        {
+            
+        }
+        else
+        {
+            sega.SetActive(false);
+            ds.SetActive(false);
+            switch_N.SetActive(false);
+        }
+        
 
         _jumpPower = sheetData.sheetDataRecord[level - 1].JumpPower;
 
@@ -73,181 +79,348 @@ public class PlayerControl : MonoBehaviour
 
     void Update()
     {
-        if (!_dead)
+        if(SceneManager.GetActiveScene().name =="Tutorial")
         {
-            _inputX = Input.GetAxisRaw("Horizontal");
-            _animator.SetInteger("ModelNumber", _modelNumber);
+            if (!_dead)
+            {
+                _inputX = Input.GetAxisRaw("Horizontal");
+                _animator.SetInteger("ModelNumber", _modelNumber);
 
+                _rb2d.velocity = new Vector2(_nowSpeed, _rb2d.velocity.y);
 
-            _rb2d.velocity = new Vector2(_nowSpeed, _rb2d.velocity.y);
-
-            if (0 != _inputX)
-            {              
-                _animator.SetBool("Walk", true);
-
-                if (0.3 < _inputX || -0.3 > _inputX)
+                if (0 != _inputX)
                 {
-                    if (_inputX > 0)
+                    _animator.SetBool("Walk", true);
+
+                    if (0.3 < _inputX || -0.3 > _inputX)
                     {
-                        _nowSpeed = runSpeed;
+                        if (_inputX > 0)
+                        {
+                            _nowSpeed = runSpeed;
+                        }
+                        else if (_inputX < 0)
+                        {
+                            _nowSpeed = -runSpeed;
+                        }
                     }
-                    else if (_inputX < 0)
+                    else
                     {
-                        _nowSpeed = -runSpeed;
+                        if (_inputX > 0)
+                        {
+                            _nowSpeed = walkSpeed;
+                        }
+                        else if (_inputX < 0)
+                        {
+                            _nowSpeed = -walkSpeed;
+                        }
                     }
                 }
                 else
                 {
-                    if (_inputX > 0)
+                    _nowSpeed = 0;
+                    _animator.SetBool("Walk", false);
+                }
+
+                if (_inputX > 0)
+                {
+                    _sr.flipX = false;
+                }
+                else if (_inputX < 0)
+                {
+                    _sr.flipX = true;
+                }
+
+                if (0 != Input.GetAxisRaw("Jump"))
+                {
+                    if (_rb2d.velocity.y == 0)
                     {
-                        _nowSpeed = walkSpeed;
-                    }
-                    else if (_inputX < 0)
-                    {
-                        _nowSpeed = -walkSpeed;
+                        _isJump = true;
                     }
                 }
-            }
-            else
-            {
-                _nowSpeed = 0;
-                _animator.SetBool("Walk", false);
-            }
 
-            if (_inputX > 0)
-            {
-                _sr.flipX = false;
-            }
-            else if (_inputX < 0)
-            {
-                _sr.flipX = true;
-            }
+                if (_isJump)
+                {
+                    _rb2d.AddForce(_jumpPower * transform.up, ForceMode2D.Impulse);
 
+                    _isJump = false;
+                }
 
-            if (0 != Input.GetAxisRaw("Jump"))
-            {
                 if (_rb2d.velocity.y == 0)
                 {
-                    _isJump = true;
+                    _animator.SetBool("Jump", false);
                 }
-            }
-
-            if (_isJump)
-            {
-                _rb2d.AddForce(_jumpPower * transform.up, ForceMode2D.Impulse);
-
-                _isJump = false;
-            }
-
-            if (_rb2d.velocity.y == 0)
-            {
-                _animator.SetBool("Jump", false);
-            }
-            else
-            {
-                _animator.SetBool("Jump", true);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                //if(_isHaveMemory)
+                else
                 {
-                    _modelNumber++;
-                    _isHaveMemory = false;
+                    _animator.SetBool("Jump", true);
+                }
 
-                    if (_modelNumber > 3)
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    //if(_isHaveMemory)
                     {
-                        _modelNumber = 0;
+                        _modelNumber++;
+                        _isHaveMemory = false;
+
+                        if (_modelNumber > 3)
+                        {
+                            _modelNumber = 0;
+                        }
+                    }
+                }
+
+                switch (_modelNumber)
+                {
+                    case 0:
+                        _bc2d.offset = new Vector2(0.05f, -0.05f);
+                        _bc2d.size = new Vector2(0.4f, 0.9f);
+                        break;
+
+                    case 1:
+                        break;
+
+                    case 2:
+                        _bc2d.offset = new Vector2(0.05f, -0.04f);
+                        _bc2d.size = new Vector2(0.5f, 0.8f);
+                        break;
+
+                    case 3:
+                        _bc2d.offset = new Vector2(0.02f, -0.095f);
+                        _bc2d.size = new Vector2(0.4f, 1.15f);
+                        break;
+                }
+
+                if (_attackFlag)
+                {
+                    if (Input.GetKeyDown(KeyCode.X))
+                    {
+                        attackArea.SetActive(true);
+
+                        _attackFlag = false;
+                    }
+                }
+                else
+                {
+                    _attackDelay += Time.deltaTime;
+
+                    if (_attackDelay >= 1f)
+                    {
+                        _attackDelay = 0;
+                        _attackFlag = true;
+                    }
+                    else if (_attackDelay >= 0.3f)
+                    {
+                        attackArea.SetActive(false);
+                    }
+                }
+
+                if (_attackFlag)
+                {
+                    if (Input.GetKeyDown(KeyCode.X))
+                    {
+                        _attackFlag = false;
+                    }
+                }
+                else
+                {
+                    _attackDelay += Time.deltaTime;
+
+                    _animator.SetBool("Attack", true);
+
+                    if (_attackDelay >= 0.6f)
+                    {
+                        _animator.SetBool("Attack", false);
+
+                        _attackFlag = true;
+
+                        _attackDelay = 0;
                     }
                 }
             }
 
-            switch (_modelNumber)
+            if (_hp <= 0)
             {
-                case 0:
-                    famiCom.SetActive(true);
-                    switch_N.SetActive(false);
-
-                    _bc2d.offset = new Vector2(0.05f, -0.05f);
-                    _bc2d.size = new Vector2(0.4f, 0.9f);
-                    break;
-
-                case 1:
-                    sega.SetActive(true);
-                    famiCom.SetActive(false);
-                    break;
-
-                case 2:
-                    ds.SetActive(true);
-                    sega.SetActive(false);
-
-                    _bc2d.offset = new Vector2(0.05f, -0.04f);
-                    _bc2d.size = new Vector2(0.5f, 0.8f);
-                    break;
-
-                case 3:
-                    switch_N.SetActive(true);
-                    ds.SetActive(false);
-
-                    _bc2d.offset = new Vector2(0.02f, -0.095f);
-                    _bc2d.size = new Vector2(0.4f, 1.15f);
-                    break;
-            }
-
-            if (_attackFlag)
-            {
-                if (Input.GetKeyDown(KeyCode.X))
-                {
-                    attackArea.SetActive(true);
-
-                    _attackFlag = false;
-                }
-            }
-            else
-            {
-                _attackDelay += Time.deltaTime;
-
-                if (_attackDelay >= 1f)
-                {
-                    _attackDelay = 0;
-                    _attackFlag = true;
-                }
-                else if (_attackDelay >= 0.3f)
-                {
-                    attackArea.SetActive(false);
-                }
-            }
-
-            if (_attackFlag)
-            {
-                if (Input.GetKeyDown(KeyCode.X))
-                {
-                    _attackFlag = false;
-                }
-            }
-            else
-            {
-                _attackDelay += Time.deltaTime;
-
-                _animator.SetBool("Attack", true);
-
-                if (_attackDelay >= 0.6f)
-                {
-                    _animator.SetBool("Attack", false);
-
-                    _attackFlag = true;
-
-                    Debug.Log("aa");
-
-                    _attackDelay = 0;
-                }
+                _animator.SetBool("Dead", true);
+                _dead = true;
             }
         }
-
-        if(_hp <= 0)
+        else
         {
-            _animator.SetBool("Dead", true);
-            _dead = true;
+            if (!_dead)
+            {
+                _inputX = Input.GetAxisRaw("Horizontal");
+                _animator.SetInteger("ModelNumber", _modelNumber);
+
+
+                _rb2d.velocity = new Vector2(_nowSpeed, _rb2d.velocity.y);
+
+                if (0 != _inputX)
+                {
+                    _animator.SetBool("Walk", true);
+
+                    if (0.3 < _inputX || -0.3 > _inputX)
+                    {
+                        if (_inputX > 0)
+                        {
+                            _nowSpeed = runSpeed;
+                        }
+                        else if (_inputX < 0)
+                        {
+                            _nowSpeed = -runSpeed;
+                        }
+                    }
+                    else
+                    {
+                        if (_inputX > 0)
+                        {
+                            _nowSpeed = walkSpeed;
+                        }
+                        else if (_inputX < 0)
+                        {
+                            _nowSpeed = -walkSpeed;
+                        }
+                    }
+                }
+                else
+                {
+                    _nowSpeed = 0;
+                    _animator.SetBool("Walk", false);
+                }
+
+                if (_inputX > 0)
+                {
+                    _sr.flipX = false;
+                }
+                else if (_inputX < 0)
+                {
+                    _sr.flipX = true;
+                }
+
+
+                if (0 != Input.GetAxisRaw("Jump"))
+                {
+                    if (_rb2d.velocity.y == 0)
+                    {
+                        _isJump = true;
+                    }
+                }
+
+                if (_isJump)
+                {
+                    _rb2d.AddForce(_jumpPower * transform.up, ForceMode2D.Impulse);
+
+                    _isJump = false;
+                }
+
+                if (_rb2d.velocity.y == 0)
+                {
+                    _animator.SetBool("Jump", false);
+                }
+                else
+                {
+                    _animator.SetBool("Jump", true);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    //if(_isHaveMemory)
+                    {
+                        _modelNumber++;
+                        _isHaveMemory = false;
+
+                        if (_modelNumber > 3)
+                        {
+                            _modelNumber = 0;
+                        }
+                    }
+                }
+
+                switch (_modelNumber)
+                {
+                    case 0:
+                        famiCom.SetActive(true);
+                        switch_N.SetActive(false);
+
+                        _bc2d.offset = new Vector2(0.05f, -0.05f);
+                        _bc2d.size = new Vector2(0.4f, 0.9f);
+                        break;
+
+                    case 1:
+                        sega.SetActive(true);
+                        famiCom.SetActive(false);
+                        break;
+
+                    case 2:
+                        ds.SetActive(true);
+                        sega.SetActive(false);
+
+                        _bc2d.offset = new Vector2(0.05f, -0.04f);
+                        _bc2d.size = new Vector2(0.5f, 0.8f);
+                        break;
+
+                    case 3:
+                        switch_N.SetActive(true);
+                        ds.SetActive(false);
+
+                        _bc2d.offset = new Vector2(0.02f, -0.095f);
+                        _bc2d.size = new Vector2(0.4f, 1.15f);
+                        break;
+                }
+
+                if (_attackFlag)
+                {
+                    if (Input.GetKeyDown(KeyCode.X))
+                    {
+                        attackArea.SetActive(true);
+
+                        _attackFlag = false;
+                    }
+                }
+                else
+                {
+                    _attackDelay += Time.deltaTime;
+
+                    if (_attackDelay >= 1f)
+                    {
+                        _attackDelay = 0;
+                        _attackFlag = true;
+                    }
+                    else if (_attackDelay >= 0.3f)
+                    {
+                        attackArea.SetActive(false);
+                    }
+                }
+
+                if (_attackFlag)
+                {
+                    if (Input.GetKeyDown(KeyCode.X))
+                    {
+                        _attackFlag = false;
+                    }
+                }
+                else
+                {
+                    _attackDelay += Time.deltaTime;
+
+                    _animator.SetBool("Attack", true);
+
+                    if (_attackDelay >= 0.6f)
+                    {
+                        _animator.SetBool("Attack", false);
+
+                        _attackFlag = true;
+
+                        Debug.Log("aa");
+
+                        _attackDelay = 0;
+                    }
+                }
+            }
+
+            if (_hp <= 0)
+            {
+                _animator.SetBool("Dead", true);
+                _dead = true;
+            }
         }
     }
 

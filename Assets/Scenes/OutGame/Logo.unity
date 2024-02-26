@@ -502,6 +502,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSkipOn: 0
   skipTime: 0
+  loadingNumber: 0
+  onButton: 0
+  isNextScene: 0
 --- !u!4 &1426800375
 Transform:
   m_ObjectHideFlags: 0

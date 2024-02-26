@@ -16,7 +16,7 @@ MonoBehaviour:
   - Level: 1
     HitPoint: 20
     AttackPower: 5
-    JumpPower: 7.5
+    JumpPower: 7.85
   - Level: 2
     HitPoint: 40
     AttackPower: 10

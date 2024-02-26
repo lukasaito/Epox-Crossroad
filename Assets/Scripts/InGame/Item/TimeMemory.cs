@@ -9,6 +9,8 @@ public class TimeMemory : MonoBehaviour
 
     private int changeTimeMemory = 0;
 
+    public GameObject effect_GetTimeMemory;
+
     void Start()
     {
         _sp = GetComponent<SpriteRenderer>();
@@ -26,6 +28,7 @@ public class TimeMemory : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            Instantiate(effect_GetTimeMemory, transform.position, transform.rotation);
             FindObjectOfType<UI_TimeMemory>().GetTimeMemory();
             _sp.enabled = false;
             _boxCol2d.enabled = false;
