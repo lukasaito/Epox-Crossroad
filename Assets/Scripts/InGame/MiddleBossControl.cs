@@ -68,6 +68,10 @@ public class MiddleBossControl : MonoBehaviour
     bool impulse;
     public GameObject stoneSpawn;
 
+    bool _invincible;
+    float _invincibleCoolTime;
+    float _colorTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -948,6 +952,33 @@ public class MiddleBossControl : MonoBehaviour
             _sr.flipX = true;
             attackP = attackR;
         }
+
+        if(_invincible)
+        {
+            _invincibleCoolTime += Time.deltaTime;
+            _colorTime += Time.deltaTime;
+
+            if(_colorTime >= 0.2f)
+            {
+                _sr.enabled = true;
+                _sr.color = new Color(255f, 255f, 255f);
+            }
+            else if(_colorTime >= 0.1f)
+            {
+                _sr.enabled = false;
+            }
+            else
+            {
+                _sr.color = new Color(255f, 0, 0);
+            }
+
+            if(_invincibleCoolTime >= 0.5f)
+            {
+                _invincible = false;
+                _invincibleCoolTime = 0;
+                _colorTime = 0;
+            }
+        }
     }
 
     void Attack()
@@ -1047,7 +1078,12 @@ public class MiddleBossControl : MonoBehaviour
     {
         if (collision.CompareTag("AA"))
         {
-            _hp -= GameObject.Find("Player_Test").GetComponent<PlayerControl>()._attackPower;
+            if(!_invincible)
+            {
+                _hp -= GameObject.Find("Player_Test").GetComponent<PlayerControl>()._attackPower;
+
+                _invincible = true;
+            }
         }
     }
 }
