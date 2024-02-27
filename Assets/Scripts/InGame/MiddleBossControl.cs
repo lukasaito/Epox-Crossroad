@@ -66,6 +66,7 @@ public class MiddleBossControl : MonoBehaviour
     bool exEffect;
 
     bool impulse;
+    bool bigImpuls;
     public GameObject stoneSpawn;
 
     bool _invincible;

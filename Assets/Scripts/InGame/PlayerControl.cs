@@ -342,11 +342,15 @@ public class PlayerControl : MonoBehaviour
 
                         _bc2d.offset = new Vector2(0.05f, -0.05f);
                         _bc2d.size = new Vector2(0.4f, 0.9f);
+
+                        Application.targetFrameRate = 30;
                         break;
 
                     case 1:
                         sega.SetActive(true);
                         famiCom.SetActive(false);
+
+                        Application.targetFrameRate = 60;
                         break;
 
                     case 2:
@@ -355,6 +359,8 @@ public class PlayerControl : MonoBehaviour
 
                         _bc2d.offset = new Vector2(0.05f, -0.04f);
                         _bc2d.size = new Vector2(0.5f, 0.8f);
+
+                        Application.targetFrameRate = 90;
                         break;
 
                     case 3:
@@ -363,6 +369,8 @@ public class PlayerControl : MonoBehaviour
 
                         _bc2d.offset = new Vector2(0.02f, -0.095f);
                         _bc2d.size = new Vector2(0.4f, 1.15f);
+
+                        Application.targetFrameRate = 120;
                         break;
                 }
 

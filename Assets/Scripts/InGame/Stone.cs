@@ -11,6 +11,7 @@ public class Stone : MonoBehaviour
     private BoxCollider2D _cl2d;
 
     bool _srON;
+    float _count;
 
     void Start()
     {
@@ -60,6 +61,22 @@ public class Stone : MonoBehaviour
 
             case 3:
                 break;
+        }
+
+        if(_srON)
+        {
+            _count += Time.deltaTime;
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (_count <= 0.1f)
+            {
+                collision.transform.position = new Vector3(-3, -3, 0);
+            }
         }
     }
 }
