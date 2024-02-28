@@ -50,6 +50,11 @@ public class PlayerControl : MonoBehaviour
 
     bool _dead;
 
+    bool _invincible;
+    float _invincibleCoolTime;
+    float _colorTime;
+
+
     void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
@@ -429,6 +434,33 @@ public class PlayerControl : MonoBehaviour
                 _animator.SetBool("Dead", true);
                 _dead = true;
             }
+
+            if (_invincible)
+            {
+                _invincibleCoolTime += Time.deltaTime;
+                _colorTime += Time.deltaTime;
+
+                if (_colorTime >= 0.2f)
+                {
+                    _sr.enabled = true;
+                    _sr.color = new Color(255f, 255f, 255f);
+                }
+                else if (_colorTime >= 0.1f)
+                {
+                    _sr.enabled = false;
+                }
+                else
+                {
+                    _sr.color = new Color(255f, 0, 0);
+                }
+
+                if (_invincibleCoolTime >= 0.8f)
+                {
+                    _invincible = false;
+                    _invincibleCoolTime = 0;
+                    _colorTime = 0;
+                }
+            }
         }
     }
 
@@ -449,12 +481,31 @@ public class PlayerControl : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Boss_Bullet"))
         {
-            _hp = _hp - 10;
 
-            Vector2 vector2 = this.transform.position - collision.transform.position;
-            _rb2d.AddForce(transform.up * vector2 * 10, ForceMode2D.Impulse);
+            if (!_invincible)
+            {
+                _hp = _hp - 10;
 
-            Debug.Log("ダメージ");
+                Vector2 vector2 = this.transform.position - collision.transform.position;
+                _rb2d.AddForce(transform.up * vector2 * 10, ForceMode2D.Impulse);
+
+                Debug.Log("ダメージ");
+                _invincible = true;
+            }
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Fire"))
+        {
+            if (!_invincible)
+            {
+                _hp -= 2f * Time.deltaTime;
+
+                Debug.Log("Fire");
+                _invincible = true;
+            }
         }
     }
 
@@ -462,12 +513,16 @@ public class PlayerControl : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            _hp = _hp -  5;
+            if (!_invincible)
+            {
+                _hp = _hp - 5;
 
-            Vector2 vector2 = this.transform.position - collision.transform.position;
-            _rb2d.AddForce(transform.up * vector2*10, ForceMode2D.Impulse);
+                Vector2 vector2 = this.transform.position - collision.transform.position;
+                _rb2d.AddForce(transform.up * vector2 * 10, ForceMode2D.Impulse);
 
-            Debug.Log("ダメージ");
+                Debug.Log("ダメージ");
+                _invincible = true;
+            }
         }
     }
 }

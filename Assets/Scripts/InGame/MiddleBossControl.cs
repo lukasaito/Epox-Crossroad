@@ -29,6 +29,7 @@ public class MiddleBossControl : MonoBehaviour
     public GameObject attackL;
     public GameObject attackR;
     public GameObject fireP;
+    public GameObject notice;
 
     float phase;
     float phase_0;
@@ -73,6 +74,8 @@ public class MiddleBossControl : MonoBehaviour
     float _invincibleCoolTime;
     float _colorTime;
 
+    bool _isDead;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -85,454 +88,163 @@ public class MiddleBossControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_hp <= 0)
+        if (!_isDead)
         {
-            _sr.enabled = false;
-            _cl2d.enabled = false;
-
-            if (!exEffect)
+            if (_hp <= 0)
             {
-                Instantiate(explosionEffect, this.transform.position, Quaternion.identity);
-                exEffect = true;
-            }
-        }
-        else if (_hp <= _hpMAX * 0.3)
-        {
-            phase = 2;
-        }
-        else if (_hp <= _hpMAX * 0.6)
-        {
-            phase = 1;
+                _sr.enabled = false;
+                _cl2d.enabled = false;
 
-            if(!impulse)
-            {
-                var impulseSorce = GetComponent<CinemachineImpulseSource>();
-                impulseSorce.GenerateImpulse();
-
-                stoneSpawn.SetActive(true);
-
-                impulse = true;
-            }
-        }
-        else
-        {
-            phase = 0;
-        }
-
-        switch(phase)
-        {
-            case 0:
-                switch(phase_0)
+                if (!exEffect)
                 {
-                    case 0:
-                        Attack();
-                        if(attackCount == 3)
-                        {
-                            phase_0++;
-                            attackCount = 0;
-                        }
-                        break;
-
-                    case 1:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_5Effect)
-                            {
-                                Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
-                                warp_5Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_5.transform.position;
-                                warpDeray = 0;
-
-                                warp_5Effect = false;
-                                phase_0++;
-
-                                stopTime = 0;
-                            }
-                        }
-                        break;
-
-                    case 2:
-                        stopTime += Time.deltaTime;
-
-                        if(stopTime >= 3)
-                        {
-                            if (!warp_2Effect)
-                            {
-                                Instantiate(warpEffect, warpPoint_2.transform.position, Quaternion.identity);
-                                warp_2Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_2.transform.position;
-                                warpDeray = 0;
-
-                                warp_2Effect = false;
-                                phase_0++;
-
-                                stopTime = 0;
-                            }
-                        }
-                        break;
-
-                    case 3:
-                        Attack();
-                        if (attackCount == 3)
-                        {
-                            phase_0++;
-                            attackCount = 0;
-                        }
-                        break;
-
-                    case 4:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_5Effect)
-                            {
-                                Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
-                                warp_5Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_5.transform.position;
-                                warpDeray = 0;
-
-                                warp_5Effect = false;
-                                phase_0++;
-
-                                stopTime = 0;
-                            }
-                        }
-                        break;
-
-                    case 5:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_1Effect)
-                            {
-                                Instantiate(warpEffect, warpPoint_1.transform.position, Quaternion.identity);
-                                warp_1Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_1.transform.position;
-                                warpDeray = 0;
-
-                                warp_1Effect = false;
-                                phase_0++;
-
-                                stopTime = 0;
-                            }
-                        }
-                        break;
-
-                    case 6:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_5Effect)
-                            {
-                                Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
-                                warp_5Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_5.transform.position;
-                                warpDeray = 0;
-
-                                warp_5Effect = false;
-                                phase_0++;
-
-                                stopTime = 0;
-                            }
-                        }
-                        break;
-
-                    case 7:
-                        Attack();
-                        if (attackCount == 3)
-                        {
-                            phase_0++;
-                            attackCount = 0;
-                        }
-                        break;
-
-                    case 8:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_2Effect)
-                            {
-                                Instantiate(warpEffect, warpPoint_2.transform.position, Quaternion.identity);
-                                warp_2Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_2.transform.position;
-                                warpDeray = 0;
-
-                                warp_2Effect = false;
-                                phase_0++;
-
-                                stopTime = 0;
-                            }
-                        }
-                        break;
-
-                    case 9:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_5Effect)
-                            {
-                                Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
-                                warp_5Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_5.transform.position;
-                                warpDeray = 0;
-
-                                warp_5Effect = false;
-                                phase_0++;
-
-                                stopTime = 0;
-                            }
-                        }
-                        break;
-
-                    case 10:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_1Effect)
-                            {
-                                Instantiate(warpEffect, warpPoint_1.transform.position, Quaternion.identity);
-                                warp_1Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_1.transform.position;
-                                warpDeray = 0;
-
-                                warp_1Effect = false;
-                                phase_0 = 0;
-
-                                stopTime = 0;
-                            }
-                        }
-                        break;
+                    Instantiate(explosionEffect, this.transform.position, Quaternion.identity);
+                    exEffect = true;
+                    _isDead = true;
                 }
-                break;
+            }
+            else if (_hp <= _hpMAX * 0.3)
+            {
+                phase = 2;
+            }
+            else if (_hp <= _hpMAX * 0.6)
+            {
+                phase = 1;
 
-            case 1:
-                switch(phase_1)
+                if (!impulse)
                 {
-                    case 0:
-                        attackCount = 0;
+                    var impulseSorce = GetComponent<CinemachineImpulseSource>();
+                    impulseSorce.GenerateImpulse();
 
-                        if (!warp_1Effect)
-                        {
-                            Instantiate(warpEffect, warpPoint_1.transform.position, Quaternion.identity);
-                            warp_1Effect = true;
-                        }
+                    stoneSpawn.SetActive(true);
 
-                        warpDeray += Time.deltaTime;
+                    impulse = true;
+                }
+            }
+            else
+            {
+                phase = 0;
+            }
 
-                        _sr.enabled = false;
-                        _cl2d.enabled = false;
-
-                        if (warpDeray >= 1)
-                        {
-                            _sr.enabled = true;
-                            _cl2d.enabled = true;
-
-                            this.transform.position = warpPoint_1.transform.position;
-                            warpDeray = 0;
-
-                            warp_1Effect = false;
-                            phase_1++;
-                        }
-                        break;
-
-                    case 1:
-                        BigAttack();
-                        if (attackCount == 1)
-                        {
-                            phase_1++;
-                            attackCount = 0;
-                        }
-                        break;
-
-                    case 2:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_4Effect)
+            switch (phase)
+            {
+                case 0:
+                    switch (phase_0)
+                    {
+                        case 0:
+                            Attack();
+                            if (attackCount == 3)
                             {
-                                Instantiate(warpEffect, warpPoint_4.transform.position, Quaternion.identity);
-                                warp_4Effect = true;
+                                phase_0++;
+                                attackCount = 0;
                             }
+                            break;
 
-                            warpDeray += Time.deltaTime;
+                        case 1:
+                            stopTime += Time.deltaTime;
 
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
+                            if (stopTime >= 3)
                             {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
+                                if (!warp_5Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
+                                    warp_5Effect = true;
+                                }
 
-                                this.transform.position = warpPoint_4.transform.position;
-                                warpDeray = 0;
+                                warpDeray += Time.deltaTime;
 
-                                warp_4Effect = false;
-                                phase_1++;
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
 
-                                stopTime = 0;
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_5.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_5Effect = false;
+                                    phase_0++;
+
+                                    stopTime = 0;
+                                }
                             }
-                        }
-                        break;
+                            break;
 
-                    case 3:
-                        Attack();
-                        if (attackCount == 3)
-                        {
-                            phase_1++;
-                            attackCount = 0;
-                        }
-                        break;
+                        case 2:
+                            stopTime += Time.deltaTime;
 
-                    case 4:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_3Effect)
+                            if (stopTime >= 3)
                             {
-                                Instantiate(warpEffect, warpPoint_3.transform.position, Quaternion.identity);
-                                warp_3Effect = true;
+                                if (!warp_2Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_2.transform.position, Quaternion.identity);
+                                    warp_2Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_2.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_2Effect = false;
+                                    phase_0++;
+
+                                    stopTime = 0;
+                                }
                             }
+                            break;
 
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
+                        case 3:
+                            Attack();
+                            if (attackCount == 3)
                             {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_3.transform.position;
-                                warpDeray = 0;
-
-                                warp_3Effect = false;
-                                phase_1++;
-
-                                stopTime = 0;
+                                phase_0++;
+                                attackCount = 0;
                             }
-                        }
-                        break;
+                            break;
 
-                    case 5:
-                        Attack();
-                        if (attackCount == 3)
-                        {
-                            phase_1++;
-                            attackCount = 0;
-                        }
-                        break;
+                        case 4:
+                            stopTime += Time.deltaTime;
 
-                    case 6:
-                        if(player.transform.position.y <= 0)
-                        {
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_5Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
+                                    warp_5Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_5.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_5Effect = false;
+                                    phase_0++;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+
+                        case 5:
                             stopTime += Time.deltaTime;
 
                             if (stopTime >= 3)
@@ -557,14 +269,233 @@ public class MiddleBossControl : MonoBehaviour
                                     warpDeray = 0;
 
                                     warp_1Effect = false;
+                                    phase_0++;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+
+                        case 6:
+                            stopTime += Time.deltaTime;
+
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_5Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
+                                    warp_5Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_5.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_5Effect = false;
+                                    phase_0++;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+
+                        case 7:
+                            Attack();
+                            if (attackCount == 3)
+                            {
+                                phase_0++;
+                                attackCount = 0;
+                            }
+                            break;
+
+                        case 8:
+                            stopTime += Time.deltaTime;
+
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_2Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_2.transform.position, Quaternion.identity);
+                                    warp_2Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_2.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_2Effect = false;
+                                    phase_0++;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+
+                        case 9:
+                            stopTime += Time.deltaTime;
+
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_5Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
+                                    warp_5Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_5.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_5Effect = false;
+                                    phase_0++;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+
+                        case 10:
+                            stopTime += Time.deltaTime;
+
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_1Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_1.transform.position, Quaternion.identity);
+                                    warp_1Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_1.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_1Effect = false;
+                                    phase_0 = 0;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+                    }
+                    break;
+
+                case 1:
+                    switch (phase_1)
+                    {
+                        case 0:
+                            attackCount = 0;
+
+                            if (!warp_1Effect)
+                            {
+                                Instantiate(warpEffect, warpPoint_1.transform.position, Quaternion.identity);
+                                warp_1Effect = true;
+                            }
+
+                            warpDeray += Time.deltaTime;
+
+                            _sr.enabled = false;
+                            _cl2d.enabled = false;
+
+                            if (warpDeray >= 1)
+                            {
+                                _sr.enabled = true;
+                                _cl2d.enabled = true;
+
+                                this.transform.position = warpPoint_1.transform.position;
+                                warpDeray = 0;
+
+                                warp_1Effect = false;
+                                phase_1++;
+                            }
+                            break;
+
+                        case 1:
+                            BigAttack();
+                            if (attackCount == 1)
+                            {
+                                phase_1++;
+                                attackCount = 0;
+                            }
+                            break;
+
+                        case 2:
+                            stopTime += Time.deltaTime;
+
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_4Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_4.transform.position, Quaternion.identity);
+                                    warp_4Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_4.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_4Effect = false;
                                     phase_1++;
 
                                     stopTime = 0;
                                 }
                             }
-                        }
-                        else
-                        {
+                            break;
+
+                        case 3:
+                            Attack();
+                            if (attackCount == 3)
+                            {
+                                phase_1++;
+                                attackCount = 0;
+                            }
+                            break;
+
+                        case 4:
                             stopTime += Time.deltaTime;
 
                             if (stopTime >= 3)
@@ -594,202 +525,148 @@ public class MiddleBossControl : MonoBehaviour
                                     stopTime = 0;
                                 }
                             }
-                        }
-                        break;
+                            break;
 
-                    case 7:
-                        if(this.transform.position.y <= 0)
-                        {
-
-                            Debug.Log("ダッシュ");
-
-                            this.transform.position = Vector2.MoveTowards(this.transform.position, warpPoint_2.transform.position, 2 * Time.deltaTime);
-
-                            if(this.transform.position.x <= warpPoint_2.transform.position.x)
+                        case 5:
+                            Attack();
+                            if (attackCount == 3)
                             {
                                 phase_1++;
+                                attackCount = 0;
                             }
-                        }
-                        else
-                        {
-                            this.transform.position = Vector2.MoveTowards(this.transform.position, warpPoint_4.transform.position, Time.deltaTime);
+                            break;
 
-                            if (this.transform.position.x <= warpPoint_4.transform.position.x)
+                        case 6:
+                            if (player.transform.position.y <= 0)
                             {
-                                phase_1++;
+                                stopTime += Time.deltaTime;
+
+                                if (stopTime >= 3)
+                                {
+                                    if (!warp_1Effect)
+                                    {
+                                        Instantiate(warpEffect, warpPoint_1.transform.position, Quaternion.identity);
+                                        warp_1Effect = true;
+                                    }
+
+                                    warpDeray += Time.deltaTime;
+
+                                    _sr.enabled = false;
+                                    _cl2d.enabled = false;
+
+                                    if (warpDeray >= 1)
+                                    {
+                                        _sr.enabled = true;
+                                        _cl2d.enabled = true;
+
+                                        this.transform.position = warpPoint_1.transform.position;
+                                        warpDeray = 0;
+
+                                        warp_1Effect = false;
+                                        phase_1++;
+
+                                        stopTime = 0;
+                                    }
+                                }
                             }
-                        }
-                        break;
-
-                    case 8:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_1Effect)
+                            else
                             {
-                                Instantiate(warpEffect, warpPoint_1.transform.position, Quaternion.identity);
-                                warp_1Effect = true;
+                                stopTime += Time.deltaTime;
+
+                                if (stopTime >= 3)
+                                {
+                                    if (!warp_3Effect)
+                                    {
+                                        Instantiate(warpEffect, warpPoint_3.transform.position, Quaternion.identity);
+                                        warp_3Effect = true;
+                                    }
+
+                                    warpDeray += Time.deltaTime;
+
+                                    _sr.enabled = false;
+                                    _cl2d.enabled = false;
+
+                                    if (warpDeray >= 1)
+                                    {
+                                        _sr.enabled = true;
+                                        _cl2d.enabled = true;
+
+                                        this.transform.position = warpPoint_3.transform.position;
+                                        warpDeray = 0;
+
+                                        warp_3Effect = false;
+                                        phase_1++;
+
+                                        stopTime = 0;
+                                    }
+                                }
                             }
+                            break;
 
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
+                        case 7:
+                            if (this.transform.position.y <= 0)
                             {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
 
-                                this.transform.position = warpPoint_1.transform.position;
-                                warpDeray = 0;
+                                Debug.Log("ダッシュ");
 
-                                warp_1Effect = false;
-                                phase_1 = 1;
+                                this.transform.position = Vector2.MoveTowards(this.transform.position, warpPoint_2.transform.position, 2 * Time.deltaTime);
 
-                                stopTime = 0;
+                                if (this.transform.position.x <= warpPoint_2.transform.position.x)
+                                {
+                                    phase_1++;
+                                }
                             }
-                        }
-                        break;
-                }
-                break;
+                            else
+                            {
+                                this.transform.position = Vector2.MoveTowards(this.transform.position, warpPoint_4.transform.position, Time.deltaTime);
 
-            case 2:
-                switch (phase_2)
-                {
-                    case 0:
-                        attackCount = 0;
+                                if (this.transform.position.x <= warpPoint_4.transform.position.x)
+                                {
+                                    phase_1++;
+                                }
+                            }
+                            break;
 
-                        if (!warp_5Effect)
-                        {
-                            Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
-                            warp_5Effect = true;
-                        }
+                        case 8:
+                            stopTime += Time.deltaTime;
 
-                        warpDeray += Time.deltaTime;
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_1Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_1.transform.position, Quaternion.identity);
+                                    warp_1Effect = true;
+                                }
 
-                        _sr.enabled = false;
-                        _cl2d.enabled = false;
+                                warpDeray += Time.deltaTime;
 
-                        if (warpDeray >= 1)
-                        {
-                            _sr.enabled = true;
-                            _cl2d.enabled = true;
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
 
-                            this.transform.position = warpPoint_5.transform.position;
-                            warpDeray = 0;
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
 
-                            warp_5Effect = false;
-                            phase_2++;
-                        }
-                        break;
+                                    this.transform.position = warpPoint_1.transform.position;
+                                    warpDeray = 0;
 
-                    case 1:
-                        Fire();
-                        if (attackCount == 1)
-                        {
-                            phase_2++;
+                                    warp_1Effect = false;
+                                    phase_1 = 1;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+                    }
+                    break;
+
+                case 2:
+                    switch (phase_2)
+                    {
+                        case 0:
                             attackCount = 0;
-                        }
-                        break;
 
-                    case 2:
-                        Attack();
-                        if (attackCount == 3)
-                        {
-                            phase_2++;
-                            attackCount = 0;
-                        }
-                        break;
-
-                    case 3:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_3Effect)
-                            {
-                                Instantiate(warpEffect, warpPoint_3.transform.position, Quaternion.identity);
-                                warp_3Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_3.transform.position;
-                                warpDeray = 0;
-
-                                warp_3Effect = false;
-                                phase_2++;
-
-                                stopTime = 0;
-                            }
-                        }
-                        break;
-
-                    case 4:
-                        BigAttack();
-                        if (attackCount == 1)
-                        {
-                            phase_2++;
-                            attackCount = 0;
-                        }
-                        break;
-
-                    case 5:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_4Effect)
-                            {
-                                Instantiate(warpEffect, warpPoint_4.transform.position, Quaternion.identity);
-                                warp_4Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_4.transform.position;
-                                warpDeray = 0;
-
-                                warp_4Effect = false;
-                                phase_2++;
-
-                                stopTime = 0;
-                            }
-                        }
-                        break;
-
-                    case 6:
-                        BigAttack();
-                        if (attackCount == 1)
-                        {
-                            phase_2++;
-                            attackCount = 0;
-                        }
-                        break;
-
-                    case 7:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
                             if (!warp_5Effect)
                             {
                                 Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
@@ -811,175 +688,306 @@ public class MiddleBossControl : MonoBehaviour
 
                                 warp_5Effect = false;
                                 phase_2++;
-
-                                stopTime = 0;
                             }
-                        }
-                        break;
+                            break;
 
-                    case 8:
-                        Fire();
-                        if (attackCount == 2)
-                        {
-                            phase_2++;
-                            attackCount = 0;
-                        }
-                        break;
-
-                    case 9:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_1Effect)
+                        case 1:
+                            Fire();
+                            if (attackCount == 1)
                             {
-                                Instantiate(warpEffect, warpPoint_1.transform.position, Quaternion.identity);
-                                warp_1Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_1.transform.position;
-                                warpDeray = 0;
-
-                                warp_1Effect = false;
                                 phase_2++;
-
-                                stopTime = 0;
+                                attackCount = 0;
                             }
-                        }
-                        break;
+                            break;
 
-                    case 10:
-                        BigAttack();
-                        if (attackCount == 1)
-                        {
-                            phase_2++;
-                            attackCount = 0;
-                        }
-                        break;
-
-                    case 11:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_2Effect)
+                        case 2:
+                            Attack();
+                            if (attackCount == 3)
                             {
-                                Instantiate(warpEffect, warpPoint_2.transform.position, Quaternion.identity);
-                                warp_2Effect = true;
-                            }
-
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
-                            {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_2.transform.position;
-                                warpDeray = 0;
-
-                                warp_2Effect = false;
                                 phase_2++;
-
-                                stopTime = 0;
+                                attackCount = 0;
                             }
-                        }
-                        break;
+                            break;
 
-                    case 12:
-                        BigAttack();
-                        if (attackCount == 1)
-                        {
-                            phase_2++;
-                            attackCount = 0;
-                        }
-                        break;
+                        case 3:
+                            stopTime += Time.deltaTime;
 
-                    case 13:
-                        stopTime += Time.deltaTime;
-
-                        if (stopTime >= 3)
-                        {
-                            if (!warp_5Effect)
+                            if (stopTime >= 3)
                             {
-                                Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
-                                warp_5Effect = true;
+                                if (!warp_3Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_3.transform.position, Quaternion.identity);
+                                    warp_3Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_3.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_3Effect = false;
+                                    phase_2++;
+
+                                    stopTime = 0;
+                                }
                             }
+                            break;
 
-                            warpDeray += Time.deltaTime;
-
-                            _sr.enabled = false;
-                            _cl2d.enabled = false;
-
-                            if (warpDeray >= 1)
+                        case 4:
+                            BigAttack();
+                            if (attackCount == 1)
                             {
-                                _sr.enabled = true;
-                                _cl2d.enabled = true;
-
-                                this.transform.position = warpPoint_5.transform.position;
-                                warpDeray = 0;
-
-                                warp_5Effect = false;
-                                phase_2 = 1;
-
-                                stopTime = 0;
+                                phase_2++;
+                                attackCount = 0;
                             }
-                        }
-                        break;
-                }
-                break;
-        }
+                            break;
 
-        if(this.transform.position.x > player.transform.position.x)
-        {
-            _sr.flipX = false;
-            attackP = attackL;
-        }
-        else
-        {
-            _sr.flipX = true;
-            attackP = attackR;
-        }
+                        case 5:
+                            stopTime += Time.deltaTime;
 
-        if(_invincible)
-        {
-            _invincibleCoolTime += Time.deltaTime;
-            _colorTime += Time.deltaTime;
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_4Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_4.transform.position, Quaternion.identity);
+                                    warp_4Effect = true;
+                                }
 
-            if(_colorTime >= 0.2f)
-            {
-                _sr.enabled = true;
-                _sr.color = new Color(255f, 255f, 255f);
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_4.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_4Effect = false;
+                                    phase_2++;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+
+                        case 6:
+                            BigAttack();
+                            if (attackCount == 1)
+                            {
+                                phase_2++;
+                                attackCount = 0;
+                            }
+                            break;
+
+                        case 7:
+                            stopTime += Time.deltaTime;
+
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_5Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
+                                    warp_5Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_5.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_5Effect = false;
+                                    phase_2++;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+
+                        case 8:
+                            Fire();
+                            if (attackCount == 2)
+                            {
+                                phase_2++;
+                                attackCount = 0;
+                            }
+                            break;
+
+                        case 9:
+                            stopTime += Time.deltaTime;
+
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_1Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_1.transform.position, Quaternion.identity);
+                                    warp_1Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_1.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_1Effect = false;
+                                    phase_2++;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+
+                        case 10:
+                            BigAttack();
+                            if (attackCount == 1)
+                            {
+                                phase_2++;
+                                attackCount = 0;
+                            }
+                            break;
+
+                        case 11:
+                            stopTime += Time.deltaTime;
+
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_2Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_2.transform.position, Quaternion.identity);
+                                    warp_2Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_2.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_2Effect = false;
+                                    phase_2++;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+
+                        case 12:
+                            BigAttack();
+                            if (attackCount == 1)
+                            {
+                                phase_2++;
+                                attackCount = 0;
+                            }
+                            break;
+
+                        case 13:
+                            stopTime += Time.deltaTime;
+
+                            if (stopTime >= 3)
+                            {
+                                if (!warp_5Effect)
+                                {
+                                    Instantiate(warpEffect, warpPoint_5.transform.position, Quaternion.identity);
+                                    warp_5Effect = true;
+                                }
+
+                                warpDeray += Time.deltaTime;
+
+                                _sr.enabled = false;
+                                _cl2d.enabled = false;
+
+                                if (warpDeray >= 1)
+                                {
+                                    _sr.enabled = true;
+                                    _cl2d.enabled = true;
+
+                                    this.transform.position = warpPoint_5.transform.position;
+                                    warpDeray = 0;
+
+                                    warp_5Effect = false;
+                                    phase_2 = 1;
+
+                                    stopTime = 0;
+                                }
+                            }
+                            break;
+                    }
+                    break;
             }
-            else if(_colorTime >= 0.1f)
+
+            if (this.transform.position.x > player.transform.position.x)
             {
-                _sr.enabled = false;
+                _sr.flipX = false;
+                attackP = attackL;
             }
             else
             {
-                _sr.color = new Color(255f, 0, 0);
+                _sr.flipX = true;
+                attackP = attackR;
             }
 
-            if(_invincibleCoolTime >= 0.5f)
+            if (_invincible)
             {
-                _invincible = false;
-                _invincibleCoolTime = 0;
-                _colorTime = 0;
+                _invincibleCoolTime += Time.deltaTime;
+                _colorTime += Time.deltaTime;
+
+                if (_colorTime >= 0.2f)
+                {
+                    _sr.enabled = true;
+                    _sr.color = new Color(255f, 255f, 255f);
+                }
+                else if (_colorTime >= 0.1f)
+                {
+                    _sr.enabled = false;
+                }
+                else
+                {
+                    _sr.color = new Color(255f, 0, 0);
+                }
+
+                if (_invincibleCoolTime >= 0.5f)
+                {
+                    _invincible = false;
+                    _invincibleCoolTime = 0;
+                    _colorTime = 0;
+                }
             }
         }
+
     }
 
     void Attack()
@@ -1069,6 +1077,7 @@ public class MiddleBossControl : MonoBehaviour
             {
                 _isAttack = true;
                 animator.SetBool("Attack", true);
+                Instantiate(notice, fireP.transform.position, Quaternion.identity);
 
                 _coolTime = 0;
             }
