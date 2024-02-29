@@ -3,6 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour
 {
+    static public bool isClear_Stage1 = false;
+    static public bool isClear_Stage2 = false;
+    static public bool isClear_Stage3 = false;
+
     public int moveCount; // 0 = ステージ1 / 1 = ステージ2 / ステージ3
     public float speed;
     public float jumpPower;
@@ -105,40 +109,47 @@ public class PlayerMove : MonoBehaviour
             {
                 // ステージ1 → ステージ2に進む
                 case 1:
-                    stage1ToStage2.SetActive(true);
-                    stage2ToStage1.SetActive(false);
+                    if(isClear_Stage1)
+                    {
+                        stage1ToStage2.SetActive(true);
+                        stage2ToStage1.SetActive(false);
 
-                    // 停止
-                    if (isStop)
-                    {
-                        _rb2d.velocity = new Vector2(0, 0);
+                        // 停止
+                        if (isStop)
+                        {
+                            _rb2d.velocity = new Vector2(0, 0);
+                        }
+                        // X軸プラス方向に移動
+                        else
+                        {
+                            stage1_PopUp.SetBool("isStart", false);
+                            _sp.flipX = false;
+                            _rb2d.velocity = new Vector2(speed, _rb2d.velocity.y);
+                        }
                     }
-                    // X軸プラス方向に移動
-                    else
-                    {
-                        stage1_PopUp.SetBool("isStart", false);
-                        _sp.flipX = false;
-                        _rb2d.velocity = new Vector2(speed, _rb2d.velocity.y);
-                    }
+                    
                     break;
 
                 // ステージ2 → ステージ3に進む
                 case 2:
-                    stage2ToStage3.SetActive(true);
-                    stage3ToStage2.SetActive(false);
+                    if(isClear_Stage2)
+                    {
+                        stage2ToStage3.SetActive(true);
+                        stage3ToStage2.SetActive(false);
 
-                    // 停止
-                    if (isStop)
-                    {
-                        
-                        _rb2d.velocity = new Vector2(0, 0);
-                    }
-                    // X軸プラス方向に移動
-                    else
-                    {
-                        stage2_PopUp.SetBool("isStart", false);
-                        _sp.flipX = false;
-                        _rb2d.velocity = new Vector2(speed, _rb2d.velocity.y);
+                        // 停止
+                        if (isStop)
+                        {
+
+                            _rb2d.velocity = new Vector2(0, 0);
+                        }
+                        // X軸プラス方向に移動
+                        else
+                        {
+                            stage2_PopUp.SetBool("isStart", false);
+                            _sp.flipX = false;
+                            _rb2d.velocity = new Vector2(speed, _rb2d.velocity.y);
+                        }
                     }
                     break;
             }

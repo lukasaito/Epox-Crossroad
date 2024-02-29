@@ -143,9 +143,9 @@ public class SceneControl : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "GameClear")
         {
             //‰½‚©‚ÌƒL[‚ª“ü—Í‚³‚ê‚é
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.anyKeyDown)
             {
-                SceneManager.LoadScene("Title");
+                SceneManager.LoadScene("StageSelect");
             }
         }
     }

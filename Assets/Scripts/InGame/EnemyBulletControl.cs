@@ -5,7 +5,10 @@ using UnityEngine;
 public class EnemyBulletControl : MonoBehaviour
 {
     private Rigidbody2D _rb2d;
+    private Animator _animator;
     public GameObject player;
+
+    private int changeFireBullet;
 
     Vector2 vector2;
 
@@ -14,6 +17,7 @@ public class EnemyBulletControl : MonoBehaviour
     void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
 
         player = GameObject.Find("Player_Test");
         vector2 = this.player.transform.position - transform.position;
@@ -21,7 +25,10 @@ public class EnemyBulletControl : MonoBehaviour
 
     void Update()
     {
-        _rb2d.velocity = vector2.normalized * 5;
+        changeFireBullet = FindObjectOfType<PlayerControl>()._modelNumber;
+        _animator.SetInteger("ChangeFireBullet", changeFireBullet);
+
+        _rb2d.velocity = vector2.normalized * 3;
 
         count += Time.deltaTime;
 

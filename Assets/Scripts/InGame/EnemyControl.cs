@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyControl : MonoBehaviour
 {
@@ -56,32 +57,39 @@ public class EnemyControl : MonoBehaviour
             switch (id)
             {
                 case 0:
-                    _rb2d.velocity = new Vector2(_moveSpeed, _rb2d.velocity.y);
+                    // TutorialÇ≈ÇÕñ≥Ç¢éû
+                    if(SceneManager.GetActiveScene().name != "Tutorial")
+                    {
+                        _rb2d.velocity = new Vector2(_moveSpeed, _rb2d.velocity.y);
 
-                    if (_moveSpeed > 0)
-                    {
-                        _sr.flipX = true;
-                    }
-                    else if (_moveSpeed < 0)
-                    {
-                        _sr.flipX = false;
+                        if (_moveSpeed > 0)
+                        {
+                            _sr.flipX = true;
+                        }
+                        else if (_moveSpeed < 0)
+                        {
+                            _sr.flipX = false;
+                        }
                     }
                     break;
 
                 case 1:
-                    _playerPos = FindObjectOfType<PlayerControl>().transform;
-                    this.transform.position = Vector2.MoveTowards(this.transform.position, _playerPos.position, _moveSpeed * Time.deltaTime);
-
-                    Vector3 dir = _playerPos.position - this.transform.position;
-                    this.transform.rotation = Quaternion.FromToRotation(Vector3.left, dir);
-
-                    if (this.transform.position.x > _playerPos.transform.position.x)
+                    if(SceneManager.GetActiveScene().name != "Tutorial")
                     {
-                        _sr.flipY = false;
-                    }
-                    else
-                    {
-                        _sr.flipY = true;
+                        _playerPos = FindObjectOfType<PlayerControl>().transform;
+                        this.transform.position = Vector2.MoveTowards(this.transform.position, _playerPos.position, _moveSpeed * Time.deltaTime);
+
+                        Vector3 dir = _playerPos.position - this.transform.position;
+                        this.transform.rotation = Quaternion.FromToRotation(Vector3.left, dir);
+
+                        if (this.transform.position.x > _playerPos.transform.position.x)
+                        {
+                            _sr.flipY = false;
+                        }
+                        else
+                        {
+                            _sr.flipY = true;
+                        }
                     }
                     break;
             }
@@ -128,6 +136,7 @@ public class EnemyControl : MonoBehaviour
         // àÍíËéûä‘åoâﬂÇ≈å≥Ç…ñﬂÇ∑ÅB
         if(isDamage)
         {
+            
             colorTime += Time.deltaTime;
             _sr.color = new Color(255f, 0f, 0f);
         }
@@ -147,6 +156,7 @@ public class EnemyControl : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        
         if (id == 0)
         {
             if (collision.gameObject)
@@ -160,6 +170,7 @@ public class EnemyControl : MonoBehaviour
     {
         if(collision.CompareTag("AA") && !isDamage)
         {
+            Debug.Log("çUåÇéÛÇØÇΩ");
             _hp -= GameObject.Find("Player_Test").GetComponent<PlayerControl>()._attackPower;
 
             isDamage = true;

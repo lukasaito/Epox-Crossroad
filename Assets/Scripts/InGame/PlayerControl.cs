@@ -16,6 +16,7 @@ public class PlayerControl : MonoBehaviour
     private Rigidbody2D _rb2d;
     private SpriteRenderer _sr;
     private BoxCollider2D _bc2d;
+    private AudioSource _audioSource;
 
     [SerializeField]
     private float _jumpPower;
@@ -55,6 +56,11 @@ public class PlayerControl : MonoBehaviour
 
     private float deadTime;
 
+    [Header("プレイヤーサウンドクリップ")]
+    public AudioClip jump;
+    public AudioClip dead;
+    public AudioClip damage;
+
 
     void Start()
     {
@@ -62,6 +68,7 @@ public class PlayerControl : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
         _bc2d = GetComponent<BoxCollider2D>();
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
         level = 1;
 
         if(SceneManager.GetActiveScene().name == "Tutorial")
@@ -91,6 +98,7 @@ public class PlayerControl : MonoBehaviour
             {
                 _inputX = Input.GetAxisRaw("Horizontal");
                 _animator.SetInteger("ModelNumber", _modelNumber);
+
 
                 _rb2d.velocity = new Vector2(_nowSpeed, _rb2d.velocity.y);
 
@@ -136,6 +144,7 @@ public class PlayerControl : MonoBehaviour
                     _sr.flipX = true;
                 }
 
+
                 if (0 != Input.GetAxisRaw("Jump"))
                 {
                     if (_rb2d.velocity.y == 0)
@@ -146,6 +155,9 @@ public class PlayerControl : MonoBehaviour
 
                 if (_isJump)
                 {
+                    _audioSource.clip = jump;
+                    _audioSource.Play();
+
                     _rb2d.AddForce(_jumpPower * transform.up, ForceMode2D.Impulse);
 
                     _isJump = false;
@@ -162,10 +174,11 @@ public class PlayerControl : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    if(_memoryCount > 0)
+                    if (_memoryCount > 0)
                     {
-                        _modelNumber++;
+                        FindObjectOfType<TimeChangeEffect>().isTimeChange();
                         _memoryCount--;
+                        _modelNumber++;
 
                         if (_modelNumber > 3)
                         {
@@ -176,22 +189,35 @@ public class PlayerControl : MonoBehaviour
 
                 switch (_modelNumber)
                 {
+                    // ファミコン
                     case 0:
+                        famiCom.SetActive(true);
                         _bc2d.offset = new Vector2(0.05f, -0.05f);
                         _bc2d.size = new Vector2(0.4f, 0.9f);
+
+                        Application.targetFrameRate = 30;
                         break;
 
+                    // Sega
                     case 1:
+                        famiCom.SetActive(false);
+                        Application.targetFrameRate = 60;
                         break;
 
+                    // 3DS
                     case 2:
                         _bc2d.offset = new Vector2(0.05f, -0.04f);
                         _bc2d.size = new Vector2(0.5f, 0.8f);
+
+                        Application.targetFrameRate = 90;
                         break;
 
+                    // Switch
                     case 3:
                         _bc2d.offset = new Vector2(0.02f, -0.095f);
                         _bc2d.size = new Vector2(0.4f, 1.15f);
+
+                        Application.targetFrameRate = 120;
                         break;
                 }
 
@@ -238,15 +264,55 @@ public class PlayerControl : MonoBehaviour
 
                         _attackFlag = true;
 
+                        Debug.Log("aa");
+
                         _attackDelay = 0;
                     }
                 }
             }
+            // 死亡
+            else
+            {
+                deadTime += Time.deltaTime;
+
+                if (deadTime > 2.0f)
+                {
+                    SceneManager.LoadScene("GameOver");
+                }
+            }
+
 
             if (_hp <= 0)
             {
                 _animator.SetBool("Dead", true);
                 _dead = true;
+            }
+
+            if (_invincible)
+            {
+                _invincibleCoolTime += Time.deltaTime;
+                _colorTime += Time.deltaTime;
+
+                if (_colorTime >= 0.2f)
+                {
+                    _sr.enabled = true;
+                    _sr.color = new Color(255f, 255f, 255f);
+                }
+                else if (_colorTime >= 0.1f)
+                {
+                    _sr.enabled = false;
+                }
+                else
+                {
+                    _sr.color = new Color(255f, 0, 0);
+                }
+
+                if (_invincibleCoolTime >= 0.8f)
+                {
+                    _invincible = false;
+                    _invincibleCoolTime = 0;
+                    _colorTime = 0;
+                }
             }
         }
         else
@@ -312,6 +378,8 @@ public class PlayerControl : MonoBehaviour
 
                 if (_isJump)
                 {
+                    _audioSource.clip = jump;
+                    _audioSource.Play();
                     _rb2d.AddForce(_jumpPower * transform.up, ForceMode2D.Impulse);
 
                     _isJump = false;
@@ -330,6 +398,7 @@ public class PlayerControl : MonoBehaviour
                 {
                     if(_memoryCount > 0)
                     {
+                        FindObjectOfType<TimeChangeEffect>().isTimeChange();
                         _memoryCount--;
                         _modelNumber++;
 
@@ -480,6 +549,11 @@ public class PlayerControl : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if(collision.gameObject.name == "NextScene")
+        {
+            SceneManager.LoadScene("StageSelect");
+        }
+
         if(collision.CompareTag("Key"))
         {
             keyF = true;
@@ -493,10 +567,19 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
+        if(collision.gameObject.name == "OpenDoor")
+        {
+            SceneManager.LoadScene("GameClear");
+            PlayerMove.isClear_Stage1 = true;
+        }
+
         if (collision.gameObject.CompareTag("Boss_Bullet"))
         {
             if (!_invincible)
             {
+                _audioSource.clip = damage;
+                _audioSource.Play();
+
                 _hp = _hp - 10;
 
                 Vector2 vector2 = this.transform.position - collision.transform.position;
@@ -528,6 +611,9 @@ public class PlayerControl : MonoBehaviour
         {
             if (!_invincible)
             {
+                _audioSource.clip = damage;
+                _audioSource.Play();
+
                 _hp = _hp - 5;
 
                 Vector2 vector2 = this.transform.position - collision.transform.position;
