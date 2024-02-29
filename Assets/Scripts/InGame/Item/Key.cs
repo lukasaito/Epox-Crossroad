@@ -7,6 +7,7 @@ public class Key : MonoBehaviour
     private Animator _animator;
     private BoxCollider2D _boxcol2d;
     private SpriteRenderer _sp;
+    private AudioSource _audioSource;
 
     private int changeKey = 0;
 
@@ -16,6 +17,7 @@ public class Key : MonoBehaviour
         _animator = GetComponent<Animator>();
         _boxcol2d = GetComponent<BoxCollider2D>();
         _sp = GetComponent<SpriteRenderer>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -37,6 +39,7 @@ public class Key : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            _audioSource.Play();
             keyLightObject.GetComponent<SpriteRenderer>().enabled = false;
             keyLightObject.GetComponent<Animator>().enabled = false;
             _boxcol2d.enabled = false;

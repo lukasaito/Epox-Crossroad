@@ -64,6 +64,27 @@ public class UI_TimeMemory : MonoBehaviour
                 ui_Switch.SetActive(true);
                 break;
         }
+
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            // 3‚ÂŠŽ‚µ‚Ä‚¢‚éŽž
+            if (_3Image.fillAmount >= 1.0f)
+            {
+                _3Image.fillAmount += 0.0f;
+            }
+
+            // 2‚ÂŠŽ‚µ‚Ä‚¢‚éŽž
+            if (_2Image.fillAmount >= 1.0f)
+            {
+                _2Image.fillAmount += 0.0f;
+            }
+
+            // 1‚ÂŠŽ‚µ‚Ä‚¢‚éŽž
+            else if (_1Image.fillAmount >= 1.0f)
+            {
+                _1Image.fillAmount = 0.0f;
+            }
+        }
     }
 
     public void GetTimeMemory()
@@ -84,6 +105,19 @@ public class UI_TimeMemory : MonoBehaviour
         else if (_1Image.fillAmount < 1.0f)
         {
             _1Image.fillAmount += 0.5f;
+        }
+
+        if(_1Image.fillAmount >= 1.0f)
+        {
+            FindObjectOfType<PlayerControl>()._memoryCount++;
+        }
+        if (_2Image.fillAmount >= 1.0f)
+        {
+            FindObjectOfType<PlayerControl>()._memoryCount++;
+        }
+        if (_3Image.fillAmount >= 1.0f)
+        {
+            FindObjectOfType<PlayerControl>()._memoryCount++;
         }
     }
 }

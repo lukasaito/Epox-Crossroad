@@ -27,11 +27,10 @@ public class PlayerControl : MonoBehaviour
     public int level;
 
     public int _modelNumber;
-    private int _memoryCount;
-    [SerializeField]
-    private bool _isHaveMemory;
+    public int _memoryCount;
 
     public GameObject famiCom;
+    public GameObject scanLine;
     public GameObject sega;
     public GameObject ds;
     public GameObject switch_N;
@@ -53,6 +52,8 @@ public class PlayerControl : MonoBehaviour
     bool _invincible;
     float _invincibleCoolTime;
     float _colorTime;
+
+    private float deadTime;
 
 
     void Start()
@@ -161,10 +162,10 @@ public class PlayerControl : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    //if(_isHaveMemory)
+                    if(_memoryCount > 0)
                     {
                         _modelNumber++;
-                        _isHaveMemory = false;
+                        _memoryCount--;
 
                         if (_modelNumber > 3)
                         {
@@ -327,10 +328,10 @@ public class PlayerControl : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    //if(_isHaveMemory)
+                    if(_memoryCount > 0)
                     {
+                        _memoryCount--;
                         _modelNumber++;
-                        _isHaveMemory = false;
 
                         if (_modelNumber > 3)
                         {
@@ -343,6 +344,7 @@ public class PlayerControl : MonoBehaviour
                 {
                     case 0:
                         famiCom.SetActive(true);
+                        scanLine.SetActive(true);
                         switch_N.SetActive(false);
 
                         _bc2d.offset = new Vector2(0.05f, -0.05f);
@@ -354,6 +356,7 @@ public class PlayerControl : MonoBehaviour
                     case 1:
                         sega.SetActive(true);
                         famiCom.SetActive(false);
+                        scanLine.SetActive(false);
 
                         Application.targetFrameRate = 60;
                         break;
@@ -428,6 +431,17 @@ public class PlayerControl : MonoBehaviour
                     }
                 }
             }
+            // Ž€–S
+            else
+            {
+                deadTime +=Time.deltaTime;
+
+                if(deadTime > 2.0f)
+                {
+                    SceneManager.LoadScene("GameOver");
+                }
+            }
+
 
             if (_hp <= 0)
             {
@@ -481,7 +495,6 @@ public class PlayerControl : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Boss_Bullet"))
         {
-
             if (!_invincible)
             {
                 _hp = _hp - 10;

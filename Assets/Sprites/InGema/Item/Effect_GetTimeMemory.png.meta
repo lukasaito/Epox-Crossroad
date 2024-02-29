@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b2224f9b84e485741a4e1502992be652
+guid: a5238f4b83aef91498a4a34810db71de
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -105,7 +105,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Effect_GetTimeMemory_0
+      name: Effect_GetTimeMemory (1)_0
       rect:
         serializedVersion: 2
         x: 0
@@ -119,14 +119,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c9944b6a76c12934aa958304cc02d2e5
-      internalID: 19966381
+      spriteID: 9a44e283ab8597046b9a7abe4510c250
+      internalID: 1870867205
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_GetTimeMemory_1
+      name: Effect_GetTimeMemory (1)_1
       rect:
         serializedVersion: 2
         x: 64
@@ -140,14 +140,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a1bca794061171d4ba0b72174203af80
-      internalID: -1185762807
+      spriteID: 36790cde62a0ca24ba503f95b6574dac
+      internalID: 44637733
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_GetTimeMemory_2
+      name: Effect_GetTimeMemory (1)_2
       rect:
         serializedVersion: 2
         x: 128
@@ -161,14 +161,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4ae5a2c7b4a83d844b69d0115b83f092
-      internalID: -528889266
+      spriteID: e32b02e19c1befd4f9f841d7a35f6ba1
+      internalID: 657102390
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_GetTimeMemory_3
+      name: Effect_GetTimeMemory (1)_3
       rect:
         serializedVersion: 2
         x: 192
@@ -182,14 +182,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 667f63b44340af4468edd915b47c323c
-      internalID: -1943966577
+      spriteID: 322eef053e09e054fb85cc8be8917456
+      internalID: 1028350945
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_GetTimeMemory_4
+      name: Effect_GetTimeMemory (1)_4
       rect:
         serializedVersion: 2
         x: 256
@@ -203,14 +203,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80ec31a37d2658d469d9a8ef6e26f6b6
-      internalID: 1714024967
+      spriteID: c2a6b2c154889eb4fbb5d06f72c466c7
+      internalID: 173778549
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Effect_GetTimeMemory_5
+      name: Effect_GetTimeMemory (1)_5
       rect:
         serializedVersion: 2
         x: 320
@@ -224,8 +224,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5e1e61d73f5fe6e4291e59f88611dd7a
-      internalID: 2118639792
+      spriteID: 5e4836492964332488328e78dbfd650c
+      internalID: -1828466002
       vertices: []
       indices: 
       edges: []
@@ -241,12 +241,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Effect_GetTimeMemory_0: 19966381
-      Effect_GetTimeMemory_1: -1185762807
-      Effect_GetTimeMemory_2: -528889266
-      Effect_GetTimeMemory_3: -1943966577
-      Effect_GetTimeMemory_4: 1714024967
-      Effect_GetTimeMemory_5: 2118639792
+      Effect_GetTimeMemory (1)_0: 1870867205
+      Effect_GetTimeMemory (1)_1: 44637733
+      Effect_GetTimeMemory (1)_2: 657102390
+      Effect_GetTimeMemory (1)_3: 1028350945
+      Effect_GetTimeMemory (1)_4: 173778549
+      Effect_GetTimeMemory (1)_5: -1828466002
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

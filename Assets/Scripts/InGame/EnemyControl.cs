@@ -7,6 +7,8 @@ public class EnemyControl : MonoBehaviour
     private Rigidbody2D _rb2d;
     private SpriteRenderer _sr;
     private Animator _animator;
+    private AudioSource _audioSource;
+    private BoxCollider2D _box2d;
     public float _moveSpeed;
     public float _hp;
 
@@ -21,6 +23,9 @@ public class EnemyControl : MonoBehaviour
 
     public int id;
 
+    public bool isDamage = false;
+    public float colorTime;
+
     // 行動許可用の変数
     [SerializeField]
     public Camera mainCamera;
@@ -31,6 +36,8 @@ public class EnemyControl : MonoBehaviour
         _rb2d = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
+        _box2d = GetComponent<BoxCollider2D>();
 
         _attackDelay = _attackDelayMax;
 
@@ -108,13 +115,29 @@ public class EnemyControl : MonoBehaviour
 
             if (_hp <= 0)
             {
-                Destroy(gameObject);
+                _audioSource.Play();
+                _sr.enabled = false;
+                _box2d.enabled = false;
+                Destroy(gameObject,1.0f);
             }
 
             _animator.SetInteger("ModelNumber", FindAnyObjectByType<PlayerControl>()._modelNumber);
         }
-    }
 
+        // 攻撃を受けたら色を変える。
+        // 一定時間経過で元に戻す。
+        if(isDamage)
+        {
+            colorTime += Time.deltaTime;
+            _sr.color = new Color(255f, 0f, 0f);
+        }
+        if (colorTime > 0.2f)
+        {
+            _sr.color = new Color(255f, 255f, 255f);
+            colorTime = 0.0f;
+            isDamage = false;
+        }
+    }
 
     void CheckOnScreen()
     {
@@ -135,9 +158,11 @@ public class EnemyControl : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("AA"))
+        if(collision.CompareTag("AA") && !isDamage)
         {
             _hp -= GameObject.Find("Player_Test").GetComponent<PlayerControl>()._attackPower;
+
+            isDamage = true;
         }
     }
 }

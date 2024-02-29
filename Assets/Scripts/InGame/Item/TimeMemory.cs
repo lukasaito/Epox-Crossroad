@@ -16,6 +16,7 @@ public class TimeMemory : MonoBehaviour
         _sp = GetComponent<SpriteRenderer>();
         _boxCol2d = GetComponent<BoxCollider2D>();
         _animator = GetComponent<Animator>();
+        _source = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -32,6 +33,7 @@ public class TimeMemory : MonoBehaviour
             FindObjectOfType<UI_TimeMemory>().GetTimeMemory();
             _sp.enabled = false;
             _boxCol2d.enabled = false;
+            _source.Play();
             Destroy(this.gameObject, 1.0f);
         }
     }
