@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LastBossControl : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class LastBossControl : MonoBehaviour
     BoxCollider2D _cl2d;
     Animator animator;
 
-    bool dead;
+    public bool dead;
 
     private bool _isAttack;
     private float _attackTime;
@@ -53,6 +54,8 @@ public class LastBossControl : MonoBehaviour
     public GameObject fire;
     public GameObject notice;
 
+    public float deadTime;
+
     void Start()
     {
         _sr = GetComponent<SpriteRenderer>();
@@ -71,6 +74,7 @@ public class LastBossControl : MonoBehaviour
             {
 
                 _sr.enabled = false;
+                GetComponentInChildren<SpriteRenderer>().enabled = false;
                 _cl2d.enabled = false;
 
                 if (!exEffect)
@@ -262,7 +266,7 @@ public class LastBossControl : MonoBehaviour
 
                         case 3:
                             Fire();
-                            if (attackCount == 1)
+                            if (attackCount == 3)
                             {
                                 phase_1++;
                                 attackCount = 0;
@@ -388,6 +392,16 @@ public class LastBossControl : MonoBehaviour
                 }
             }
         }
+        else
+        {
+
+            deadTime += Time.deltaTime;
+
+            if (deadTime >= 3)
+            {
+                SceneManager.LoadScene("GameClear");
+            }
+        }
     }
 
     void Attack()
@@ -465,15 +479,10 @@ public class LastBossControl : MonoBehaviour
             if (attackMaxTime < _attackTime)
             {
 
-                if (!tracking)
-                {
-                    trackingP = player.transform.position;
-
-                    tracking = true;
-                }
 
                 animator.SetBool("Attack", false);
-                Instantiate(fire, trackingP, Quaternion.identity);
+                Instantiate(fire, new Vector3(trackingP.x, -3.1f, 0), Quaternion.identity);
+                tracking = false;
                 attackCount++;
 
                 _isAttack = false;
@@ -487,9 +496,17 @@ public class LastBossControl : MonoBehaviour
 
             if (_coolTime >= 4.0f)
             {
+
+                if (!tracking)
+                {
+                    trackingP = player.transform.position;
+
+                    tracking = true;
+                }
+
                 _isAttack = true;
                 animator.SetBool("Attack", true);
-                Instantiate(notice, trackingP, Quaternion.identity);
+                Instantiate(notice, new Vector3(trackingP.x,-3.1f,0) , Quaternion.identity);
 
                 _coolTime = 0;
             }
