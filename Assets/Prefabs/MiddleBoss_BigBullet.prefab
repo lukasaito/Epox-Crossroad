@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8784951592873615516}
   - component: {fileID: 3855147516736515776}
   - component: {fileID: 5579187583379789324}
-  - component: {fileID: 2576862561777936511}
+  - component: {fileID: -5632318609762398063}
   m_Layer: 0
   m_Name: MiddleBoss_BigBullet
   m_TagString: Boss_Bullet
@@ -124,7 +124,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2576862561777936511
+--- !u!114 &-5632318609762398063
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2749180254672565274}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6f68573ea8e4bd41be9f7ef54213560, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c56b74d4c6a7d54eb7ecc471946c470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}

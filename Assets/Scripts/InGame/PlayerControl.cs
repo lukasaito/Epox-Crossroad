@@ -223,7 +223,7 @@ public class PlayerControl : MonoBehaviour
 
                 if (_attackFlag)
                 {
-                    if (Input.GetKeyDown(KeyCode.X))
+                    if (Input.GetMouseButtonDown(0))
                     {
                         attackArea.SetActive(true);
 
@@ -247,7 +247,7 @@ public class PlayerControl : MonoBehaviour
 
                 if (_attackFlag)
                 {
-                    if (Input.GetKeyDown(KeyCode.X))
+                    if (Input.GetMouseButtonDown(0))
                     {
                         _attackFlag = false;
                     }
@@ -453,7 +453,7 @@ public class PlayerControl : MonoBehaviour
 
                 if (_attackFlag)
                 {
-                    if (Input.GetKeyDown(KeyCode.X))
+                    if (Input.GetMouseButtonDown(0))
                     {
                         attackArea.SetActive(true);
 
@@ -477,7 +477,7 @@ public class PlayerControl : MonoBehaviour
 
                 if (_attackFlag)
                 {
-                    if (Input.GetKeyDown(KeyCode.X))
+                    if (Input.GetMouseButtonDown(0))
                     {
                         _attackFlag = false;
                     }
@@ -588,6 +588,11 @@ public class PlayerControl : MonoBehaviour
                 Debug.Log("É_ÉÅÅ[ÉW");
                 _invincible = true;
             }
+        }
+
+        if(collision.CompareTag("DArea"))
+        {
+            _dead = true;
         }
     }
 

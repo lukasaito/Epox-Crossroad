@@ -12,6 +12,7 @@ TagManager:
   - Boss_Bullet
   - TimeMemory
   - Fire
+  - DArea
   layers:
   - Default
   - TransparentFX
