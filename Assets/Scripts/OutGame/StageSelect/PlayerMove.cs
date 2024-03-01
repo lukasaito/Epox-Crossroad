@@ -93,13 +93,16 @@ public class PlayerMove : MonoBehaviour
         // ”CˆÓ‚Ìƒ{ƒ^ƒ“ ‚È‚¨‚©‚Â ’â~’†‚Ìê‡
         if (Input.GetKeyDown(KeyCode.D) && isStop || Input.GetKeyDown(KeyCode.RightArrow) && isStop)
         {
-            // 3‚æ‚è‚à‰º‚Ìê‡
-            if (moveCount < 3)
+            if(isClear_Stage1)
             {
-                isStop = false;
-                isMoveNow = true;
-                moveCount += 1;
-                plusMove = true;
+                // 3‚æ‚è‚à‰º‚Ìê‡
+                if (moveCount < 3)
+                {
+                    isStop = false;
+                    isMoveNow = true;
+                    moveCount += 1;
+                    plusMove = true;
+                }
             }
         }
 

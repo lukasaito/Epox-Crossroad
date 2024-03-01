@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyBulletControl : MonoBehaviour
@@ -28,7 +26,7 @@ public class EnemyBulletControl : MonoBehaviour
         changeFireBullet = FindObjectOfType<PlayerControl>()._modelNumber;
         _animator.SetInteger("ChangeFireBullet", changeFireBullet);
 
-        _rb2d.velocity = vector2.normalized * 3;
+        _rb2d.velocity = vector2.normalized * 4;
 
         count += Time.deltaTime;
 

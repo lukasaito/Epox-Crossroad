@@ -74,17 +74,18 @@ public class GameOverControl : MonoBehaviour
         {
             switch(selectNumber)
             {
+                
                 case 0:
                     nextSceneTime += Time.deltaTime;
 
                     if (nextSceneTime > 2.0f)
                     {
-                        
+                        nextScene = false;
                     }
                     break;
+                
 
                 case 1:
-
                     nextSceneTime += Time.deltaTime;
 
                     if (nextSceneTime > 2.0f)

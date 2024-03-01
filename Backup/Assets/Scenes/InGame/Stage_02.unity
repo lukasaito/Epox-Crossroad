@@ -244,6 +244,7 @@ GameObject:
   m_Component:
   - component: {fileID: 141363866}
   - component: {fileID: 141363865}
+  - component: {fileID: 141363867}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -284,6 +285,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &141363867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141363864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 657b21e7611c5794a9fcfb96b1b65e22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  famiconTile: {fileID: 689540504}
+  segaTile: {fileID: 904227417}
+  dsTile: {fileID: 760383815}
+  switchTile: {fileID: 1858806473}
 --- !u!1 &142240946
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,6 +430,10 @@ PrefabInstance:
       propertyPath: famiCom
       value: 
       objectReference: {fileID: 821646567}
+    - target: {fileID: 2136140292231196937, guid: 430756d44c27bfb4280a86a50d2c007d, type: 3}
+      propertyPath: scanLine
+      value: 
+      objectReference: {fileID: 580084430}
     - target: {fileID: 2136140292231196937, guid: 430756d44c27bfb4280a86a50d2c007d, type: 3}
       propertyPath: switch_N
       value: 
@@ -2884,6 +2905,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &580084430 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5837274306676664861, guid: 634bc865aca367f43aedf9ff7a1e2145, type: 3}
+  m_PrefabInstance: {fileID: 418961412}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &606704866
 GameObject:
   m_ObjectHideFlags: 0

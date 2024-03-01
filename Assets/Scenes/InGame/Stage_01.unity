@@ -2193,7 +2193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3930483801811798192, guid: 2b4fe060f748c4544a984848c2cba401, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.2714115
+      value: 5.97
       objectReference: {fileID: 0}
     - target: {fileID: 3930483801811798192, guid: 2b4fe060f748c4544a984848c2cba401, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3148,71 +3148,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7856080343725803454, guid: 5b8e0b1e7b1d7364e8d8eb005b0fcabc, type: 3}
   m_PrefabInstance: {fileID: 831688050}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &844847424
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 140714278746863430, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_RootOrder
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863430, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863430, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863430, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863430, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863430, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863430, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863430, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863430, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863430, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863430, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863449, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: mainCamera
-      value: 
-      objectReference: {fileID: 1998019252}
-    - target: {fileID: 140714278746863450, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_Name
-      value: Enemy2 (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 140714278746863450, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: a6b475eeb490e8d43a2526ae22e06911, type: 3}
 --- !u!1 &848324514
 GameObject:
   m_ObjectHideFlags: 0
@@ -3809,6 +3744,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &974037803
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 974037804}
+  m_Layer: 0
+  m_Name: Famicon_LeftWall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &974037804
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974037803}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1608102330}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &982511588
 GameObject:
   m_ObjectHideFlags: 0
@@ -13228,7 +13194,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3930483801811798192, guid: 2b4fe060f748c4544a984848c2cba401, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.54
+      value: 12.68
       objectReference: {fileID: 0}
     - target: {fileID: 3930483801811798192, guid: 2b4fe060f748c4544a984848c2cba401, type: 3}
       propertyPath: m_LocalPosition.y
@@ -14891,7 +14857,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 26
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1585712693
 PrefabInstance:
@@ -15129,7 +15095,7 @@ MonoBehaviour:
   sheetData: {fileID: 11400000, guid: 26895aa5b8e79384db8380bf6e8f708c, type: 2}
   level: 0
   _modelNumber: 0
-  _memoryCount: 411
+  _memoryCount: 0
   famiCom: {fileID: 114689925}
   scanLine: {fileID: 601882326}
   sega: {fileID: 1868117130}
@@ -15138,7 +15104,7 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _attackPower: 0
   attackArea: {fileID: 501176968}
-  _hp: 98.18
+  _hp: 20
   jump: {fileID: 8300000, guid: cf1d7154a53b04b4ab25934cc63833cd, type: 3}
   dead: {fileID: 8300000, guid: 345cc3a8106fd8d4287c74eaffdadf5a, type: 3}
   damage: {fileID: 8300000, guid: d9032d43e26c5be458c86ed4a836f4a2, type: 3}
@@ -15254,6 +15220,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 501176969}
+  - {fileID: 974037804}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15549,7 +15516,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 552ca6c97e297854d8b8f8e700ce8eb2, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 1
   Mute: 0

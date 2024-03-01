@@ -90,12 +90,11 @@ public class SceneControl : MonoBehaviour
 
                 if(isNextScene)
                 {
-                    if (FindObjectOfType<FadeImageControl>().nextTime >= 1.3f)
                     {
                         // ÅuStoryÅvÇ…ëJà⁄Ç∑ÇÈ
                         // SceneManager.LoadScene("Story");
 
-                        SceneManager.LoadScene("Loading");
+                        //SceneManager.LoadScene("Loading");
                     }
                 }
             }
@@ -148,5 +147,7 @@ public class SceneControl : MonoBehaviour
                 SceneManager.LoadScene("StageSelect");
             }
         }
+
+
     }
 }

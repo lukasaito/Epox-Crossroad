@@ -166,14 +166,24 @@ public class EnemyControl : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.CompareTag("AA") && !isDamage)
         {
             Debug.Log("çUåÇéÛÇØÇΩ");
+
             _hp -= GameObject.Find("Player_Test").GetComponent<PlayerControl>()._attackPower;
 
             isDamage = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("AA"))
+        {
+
+            isDamage = false;
         }
     }
 }

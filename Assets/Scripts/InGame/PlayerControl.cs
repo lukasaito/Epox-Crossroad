@@ -73,7 +73,7 @@ public class PlayerControl : MonoBehaviour
 
         if(SceneManager.GetActiveScene().name == "Tutorial")
         {
-            
+            _hp += 10000;   
         }
         else
         {
