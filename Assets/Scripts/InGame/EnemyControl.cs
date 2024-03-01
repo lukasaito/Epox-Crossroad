@@ -24,6 +24,7 @@ public class EnemyControl : MonoBehaviour
 
     public int id;
 
+    private bool inATKArea;
     public bool isDamage = false;
     public float colorTime;
 
@@ -132,11 +133,25 @@ public class EnemyControl : MonoBehaviour
             _animator.SetInteger("ModelNumber", FindAnyObjectByType<PlayerControl>()._modelNumber);
         }
 
+        // 攻撃範囲内にいるときに、ダメージを受けた場合の処理
+        // 03/02：オカムラ追加
+        if (inATKArea)
+        {
+            if (isDamage == false)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Debug.Log("Dmg");
+                    _hp -= GameObject.Find("Player_Test").GetComponent<PlayerControl>()._attackPower;
+                    isDamage = true;
+                }
+            }
+        }
+
         // 攻撃を受けたら色を変える。
         // 一定時間経過で元に戻す。
         if(isDamage)
-        {
-            
+        {            
             colorTime += Time.deltaTime;
             _sr.color = new Color(255f, 0f, 0f);
         }
@@ -168,13 +183,11 @@ public class EnemyControl : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.CompareTag("AA") && !isDamage)
+        if(collision.CompareTag("AA"))
         {
-            Debug.Log("攻撃受けた");
 
-            _hp -= GameObject.Find("Player_Test").GetComponent<PlayerControl>()._attackPower;
-
-            isDamage = true;
+            Debug.Log("in");
+            inATKArea = true;
         }
     }
 
@@ -183,7 +196,7 @@ public class EnemyControl : MonoBehaviour
         if (collision.gameObject.CompareTag("AA"))
         {
 
-            isDamage = false;
+            inATKArea = false;
         }
     }
 }

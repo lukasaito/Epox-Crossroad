@@ -225,7 +225,7 @@ public class PlayerControl : MonoBehaviour
                 {
                     if (Input.GetMouseButtonDown(0))
                     {
-                        attackArea.SetActive(true);
+                        //attackArea.SetActive(true);
 
                         _attackFlag = false;
                     }
@@ -241,7 +241,7 @@ public class PlayerControl : MonoBehaviour
                     }
                     else if (_attackDelay >= 0.3f)
                     {
-                        attackArea.SetActive(false);
+                        //attackArea.SetActive(false);
                     }
                 }
 
