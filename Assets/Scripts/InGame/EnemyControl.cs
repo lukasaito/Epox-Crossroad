@@ -24,7 +24,7 @@ public class EnemyControl : MonoBehaviour
 
     public int id;
 
-    private bool inATKArea;
+    public bool inATKArea;
     public bool isDamage = false;
     public float colorTime;
 
@@ -55,8 +55,10 @@ public class EnemyControl : MonoBehaviour
 
         if(canAction)
         {
+            // 敵の種別
             switch (id)
             {
+                // スライム
                 case 0:
                     // Tutorialでは無い時
                     if(SceneManager.GetActiveScene().name != "Tutorial")
@@ -74,6 +76,7 @@ public class EnemyControl : MonoBehaviour
                     }
                     break;
 
+                // 小型ドラゴン
                 case 1:
                     if(SceneManager.GetActiveScene().name != "Tutorial")
                     {
@@ -122,12 +125,17 @@ public class EnemyControl : MonoBehaviour
                 _isAttack = false;
             }
 
+            // 死亡時
             if (_hp <= 0)
             {
-                _audioSource.Play();
+                if (!_audioSource.isPlaying)
+                {
+                    _audioSource.Play();
+                }
+                _rb2d.gravityScale = 0;
                 _sr.enabled = false;
                 _box2d.enabled = false;
-                Destroy(gameObject,1.0f);
+                Destroy(gameObject,0.2f);
             }
 
             _animator.SetInteger("ModelNumber", FindAnyObjectByType<PlayerControl>()._modelNumber);
@@ -160,6 +168,9 @@ public class EnemyControl : MonoBehaviour
             _sr.color = new Color(255f, 255f, 255f);
             colorTime = 0.0f;
             isDamage = false;
+
+            // 03/02 : マシコ追加。
+            inATKArea = false;
         }
     }
 
@@ -185,17 +196,15 @@ public class EnemyControl : MonoBehaviour
     {
         if(collision.CompareTag("AA"))
         {
-
             Debug.Log("in");
             inATKArea = true;
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("AA"))
         {
-
             inATKArea = false;
         }
     }

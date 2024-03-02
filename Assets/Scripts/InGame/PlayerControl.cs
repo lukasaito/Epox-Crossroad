@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class PlayerControl : MonoBehaviour
 {
-    private float _inputX;
+    [Header("カメラのオブジェクト")]
+    public Camera mainCamera;
+    public BoxCollider2D mainCameraColl;
+    public CinemachineVirtualCamera cmCamera;
+
+    static public float _inputX;
     private float _nowSpeed;
     [SerializeField]
     private float walkSpeed;
@@ -14,7 +20,7 @@ public class PlayerControl : MonoBehaviour
     private float runSpeed;
 
     private Rigidbody2D _rb2d;
-    private SpriteRenderer _sr;
+    static public SpriteRenderer _sr;
     private BoxCollider2D _bc2d;
     private AudioSource _audioSource;
 
@@ -61,7 +67,6 @@ public class PlayerControl : MonoBehaviour
     public AudioClip dead;
     public AudioClip damage;
 
-
     void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
@@ -73,476 +78,261 @@ public class PlayerControl : MonoBehaviour
 
         if(SceneManager.GetActiveScene().name == "Tutorial")
         {
-            _hp += 10000;   
+            _hp = 999999;
+
+            _jumpPower = sheetData.sheetDataRecord[level - 1].JumpPower;
+
+            _attackPower = sheetData.sheetDataRecord[level - 1].AttackPower;
         }
         else
         {
             sega.SetActive(false);
             ds.SetActive(false);
             switch_N.SetActive(false);
+
+            _jumpPower = sheetData.sheetDataRecord[level - 1].JumpPower;
+
+            _attackPower = sheetData.sheetDataRecord[level - 1].AttackPower;
+
+            _hp = sheetData.sheetDataRecord[level - 1].HitPoint;
         }
-        
-
-        _jumpPower = sheetData.sheetDataRecord[level - 1].JumpPower;
-
-        _attackPower = sheetData.sheetDataRecord[level - 1].AttackPower;
-
-        _hp = sheetData.sheetDataRecord[level - 1].HitPoint;
     }
 
     void Update()
     {
-        if(SceneManager.GetActiveScene().name =="Tutorial")
+        if (!_dead)
         {
-            if (!_dead)
+            _inputX = Input.GetAxisRaw("Horizontal");
+            _animator.SetInteger("ModelNumber", _modelNumber);
+            _rb2d.velocity = new Vector2(_nowSpeed, _rb2d.velocity.y);
+
+            if (0 != _inputX)
             {
-                _inputX = Input.GetAxisRaw("Horizontal");
-                _animator.SetInteger("ModelNumber", _modelNumber);
+                _animator.SetBool("Walk", true);
 
-
-                _rb2d.velocity = new Vector2(_nowSpeed, _rb2d.velocity.y);
-
-                if (0 != _inputX)
+                if (0.3 < _inputX || -0.3 > _inputX)
                 {
-                    _animator.SetBool("Walk", true);
-
-                    if (0.3 < _inputX || -0.3 > _inputX)
+                    if (_inputX > 0)
                     {
-                        if (_inputX > 0)
-                        {
-                            _nowSpeed = runSpeed;
-                        }
-                        else if (_inputX < 0)
-                        {
-                            _nowSpeed = -runSpeed;
-                        }
+                        _nowSpeed = runSpeed;
                     }
-                    else
+                    else if (_inputX < 0)
                     {
-                        if (_inputX > 0)
-                        {
-                            _nowSpeed = walkSpeed;
-                        }
-                        else if (_inputX < 0)
-                        {
-                            _nowSpeed = -walkSpeed;
-                        }
+                        _nowSpeed = -runSpeed;
                     }
                 }
                 else
                 {
-                    _nowSpeed = 0;
-                    _animator.SetBool("Walk", false);
-                }
-
-                if (_inputX > 0)
-                {
-                    _sr.flipX = false;
-                }
-                else if (_inputX < 0)
-                {
-                    _sr.flipX = true;
-                }
-
-
-                if (0 != Input.GetAxisRaw("Jump"))
-                {
-                    if (_rb2d.velocity.y == 0)
+                    if (_inputX > 0)
                     {
-                        _isJump = true;
+                        _nowSpeed = walkSpeed;
                     }
-                }
-
-                if (_isJump)
-                {
-                    _audioSource.clip = jump;
-                    _audioSource.Play();
-
-                    _rb2d.AddForce(_jumpPower * transform.up, ForceMode2D.Impulse);
-
-                    _isJump = false;
-                }
-
-                if (_rb2d.velocity.y == 0)
-                {
-                    _animator.SetBool("Jump", false);
-                }
-                else
-                {
-                    _animator.SetBool("Jump", true);
-                }
-
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    if (_memoryCount > 0)
+                    else if (_inputX < 0)
                     {
-                        FindObjectOfType<TimeChangeEffect>().isTimeChange();
-                        _memoryCount--;
-                        _modelNumber++;
-
-                        if (_modelNumber > 3)
-                        {
-                            _modelNumber = 0;
-                        }
-                    }
-                }
-
-                switch (_modelNumber)
-                {
-                    // ファミコン
-                    case 0:
-                        famiCom.SetActive(true);
-                        _bc2d.offset = new Vector2(0.05f, -0.05f);
-                        _bc2d.size = new Vector2(0.4f, 0.9f);
-
-                        Application.targetFrameRate = 30;
-                        break;
-
-                    // Sega
-                    case 1:
-                        famiCom.SetActive(false);
-                        Application.targetFrameRate = 60;
-                        break;
-
-                    // 3DS
-                    case 2:
-                        _bc2d.offset = new Vector2(0.05f, -0.04f);
-                        _bc2d.size = new Vector2(0.5f, 0.8f);
-
-                        Application.targetFrameRate = 90;
-                        break;
-
-                    // Switch
-                    case 3:
-                        _bc2d.offset = new Vector2(0.02f, -0.095f);
-                        _bc2d.size = new Vector2(0.4f, 1.15f);
-
-                        Application.targetFrameRate = 120;
-                        break;
-                }
-
-                if (_attackFlag)
-                {
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        //attackArea.SetActive(true);
-
-                        _attackFlag = false;
-                    }
-                }
-                else
-                {
-                    _attackDelay += Time.deltaTime;
-
-                    if (_attackDelay >= 1f)
-                    {
-                        _attackDelay = 0;
-                        _attackFlag = true;
-                    }
-                    else if (_attackDelay >= 0.3f)
-                    {
-                        //attackArea.SetActive(false);
-                    }
-                }
-
-                if (_attackFlag)
-                {
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        _attackFlag = false;
-                    }
-                }
-                else
-                {
-                    _attackDelay += Time.deltaTime;
-
-                    _animator.SetBool("Attack", true);
-
-                    if (_attackDelay >= 0.6f)
-                    {
-                        _animator.SetBool("Attack", false);
-
-                        _attackFlag = true;
-
-                        Debug.Log("aa");
-
-                        _attackDelay = 0;
+                        _nowSpeed = -walkSpeed;
                     }
                 }
             }
-            // 死亡
             else
             {
-                deadTime += Time.deltaTime;
+                _nowSpeed = 0;
+                _animator.SetBool("Walk", false);
+            }
 
-                if (deadTime > 2.0f)
+            if (_inputX > 0)
+            {
+                _sr.flipX = false;
+                attackArea.transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            else if (_inputX < 0)
+            {
+                _sr.flipX = true;
+                attackArea.transform.eulerAngles = new Vector3(0, 180, 0);
+            }
+
+            if (0 != Input.GetAxisRaw("Jump"))
+            {
+                if (_rb2d.velocity.y == 0)
                 {
-                    SceneManager.LoadScene("GameOver");
+                    _isJump = true;
                 }
             }
 
-
-            if (_hp <= 0)
+            if (_isJump)
             {
-                _animator.SetBool("Dead", true);
-                _dead = true;
+                _audioSource.clip = jump;
+                _audioSource.Play();
+
+                _rb2d.AddForce(_jumpPower * transform.up, ForceMode2D.Impulse);
+
+                _isJump = false;
             }
 
-            if (_invincible)
+            if (_rb2d.velocity.y == 0)
             {
-                _invincibleCoolTime += Time.deltaTime;
-                _colorTime += Time.deltaTime;
+                _animator.SetBool("Jump", false);
+            }
+            else
+            {
+                _animator.SetBool("Jump", true);
+            }
 
-                if (_colorTime >= 0.2f)
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                if (_memoryCount > 0)
                 {
-                    _sr.enabled = true;
-                    _sr.color = new Color(255f, 255f, 255f);
-                }
-                else if (_colorTime >= 0.1f)
-                {
-                    _sr.enabled = false;
-                }
-                else
-                {
-                    _sr.color = new Color(255f, 0, 0);
-                }
+                    FindObjectOfType<TimeChangeEffect>().isTimeChange();
+                    _memoryCount--;
+                    _modelNumber++;
 
-                if (_invincibleCoolTime >= 0.8f)
+                    if (_modelNumber > 3)
+                    {
+                        _modelNumber = 0;
+                    }
+                }
+            }
+
+            switch (_modelNumber)
+            {
+                // ファミコン
+                case 0:
+                    mainCameraColl.enabled = true;
+                    // 左方向
+                    if (_inputX < 0f)
+                    {
+                        cmCamera.Follow = null;
+                    }
+                    // 右方向
+                    else if (_inputX > 0f)
+                    {
+                        Vector2 viewportPoint = mainCamera.WorldToViewportPoint(transform.position);
+                        if (viewportPoint.x > 0.4f && viewportPoint.x < 0.6f)
+                        {
+                            cmCamera.Follow = this.transform;
+                        }
+                    }
+
+                    famiCom.SetActive(true);
+                    _bc2d.offset = new Vector2(0.05f, -0.05f);
+                    _bc2d.size = new Vector2(0.4f, 0.9f);
+
+                    Application.targetFrameRate = 30;
+                    break;
+
+                // Sega
+                case 1:
+                    mainCameraColl.enabled = false;
+                    famiCom.SetActive(false);
+                    Application.targetFrameRate = 60;
+                    break;
+
+                // 3DS
+                case 2:
+                    _bc2d.offset = new Vector2(0.05f, -0.04f);
+                    _bc2d.size = new Vector2(0.5f, 0.8f);
+
+                    Application.targetFrameRate = 90;
+                    break;
+
+                // Switch
+                case 3:
+                    _bc2d.offset = new Vector2(0.02f, -0.095f);
+                    _bc2d.size = new Vector2(0.4f, 1.15f);
+
+                    Application.targetFrameRate = 120;
+                    break;
+            }
+
+            if (_attackFlag)
+            {
+                if (Input.GetMouseButtonDown(0))
                 {
-                    _invincible = false;
-                    _invincibleCoolTime = 0;
-                    _colorTime = 0;
+                    //attackArea.SetActive(true);
+
+                    _attackFlag = false;
+                }
+            }
+            else
+            {
+                _attackDelay += Time.deltaTime;
+
+                if (_attackDelay >= 1f)
+                {
+                    _attackDelay = 0;
+                    _attackFlag = true;
+                }
+                else if (_attackDelay >= 0.3f)
+                {
+                    //attackArea.SetActive(false);
+                }
+            }
+
+            if (_attackFlag)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    _attackFlag = false;
+                }
+            }
+            else
+            {
+                _attackDelay += Time.deltaTime;
+
+                _animator.SetBool("Attack", true);
+
+                if (_attackDelay >= 0.6f)
+                {
+                    _animator.SetBool("Attack", false);
+
+                    _attackFlag = true;
+
+                    Debug.Log("aa");
+
+                    _attackDelay = 0;
                 }
             }
         }
+        // 死亡
         else
         {
-            if (!_dead)
+            deadTime += Time.deltaTime;
+
+            if (deadTime > 2.0f)
             {
-                _inputX = Input.GetAxisRaw("Horizontal");
-                _animator.SetInteger("ModelNumber", _modelNumber);
-
-
-                _rb2d.velocity = new Vector2(_nowSpeed, _rb2d.velocity.y);
-
-                if (0 != _inputX)
-                {
-                    _animator.SetBool("Walk", true);
-
-                    if (0.3 < _inputX || -0.3 > _inputX)
-                    {
-                        if (_inputX > 0)
-                        {
-                            _nowSpeed = runSpeed;
-                        }
-                        else if (_inputX < 0)
-                        {
-                            _nowSpeed = -runSpeed;
-                        }
-                    }
-                    else
-                    {
-                        if (_inputX > 0)
-                        {
-                            _nowSpeed = walkSpeed;
-                        }
-                        else if (_inputX < 0)
-                        {
-                            _nowSpeed = -walkSpeed;
-                        }
-                    }
-                }
-                else
-                {
-                    _nowSpeed = 0;
-                    _animator.SetBool("Walk", false);
-                }
-
-                if (_inputX > 0)
-                {
-                    _sr.flipX = false;
-                }
-                else if (_inputX < 0)
-                {
-                    _sr.flipX = true;
-                }
-
-
-                if (0 != Input.GetAxisRaw("Jump"))
-                {
-                    if (_rb2d.velocity.y == 0)
-                    {
-                        _isJump = true;
-                    }
-                }
-
-                if (_isJump)
-                {
-                    _audioSource.clip = jump;
-                    _audioSource.Play();
-                    _rb2d.AddForce(_jumpPower * transform.up, ForceMode2D.Impulse);
-
-                    _isJump = false;
-                }
-
-                if (_rb2d.velocity.y == 0)
-                {
-                    _animator.SetBool("Jump", false);
-                }
-                else
-                {
-                    _animator.SetBool("Jump", true);
-                }
-
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    if(_memoryCount > 0)
-                    {
-                        FindObjectOfType<TimeChangeEffect>().isTimeChange();
-                        _memoryCount--;
-                        _modelNumber++;
-
-                        if (_modelNumber > 3)
-                        {
-                            _modelNumber = 0;
-                        }
-                    }
-                }
-
-                switch (_modelNumber)
-                {
-                    case 0:
-                        famiCom.SetActive(true);
-                        scanLine.SetActive(true);
-                        switch_N.SetActive(false);
-
-                        _bc2d.offset = new Vector2(0.05f, -0.05f);
-                        _bc2d.size = new Vector2(0.4f, 0.9f);
-
-                        Application.targetFrameRate = 30;
-                        break;
-
-                    case 1:
-                        sega.SetActive(true);
-                        famiCom.SetActive(false);
-                        scanLine.SetActive(false);
-
-                        Application.targetFrameRate = 60;
-                        break;
-
-                    case 2:
-                        ds.SetActive(true);
-                        sega.SetActive(false);
-
-                        _bc2d.offset = new Vector2(0.05f, -0.04f);
-                        _bc2d.size = new Vector2(0.5f, 0.8f);
-
-                        Application.targetFrameRate = 90;
-                        break;
-
-                    case 3:
-                        switch_N.SetActive(true);
-                        ds.SetActive(false);
-
-                        _bc2d.offset = new Vector2(0.02f, -0.095f);
-                        _bc2d.size = new Vector2(0.4f, 1.15f);
-
-                        Application.targetFrameRate = 120;
-                        break;
-                }
-
-                if (_attackFlag)
-                {
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        attackArea.SetActive(true);
-
-                        _attackFlag = false;
-                    }
-                }
-                else
-                {
-                    _attackDelay += Time.deltaTime;
-
-                    if (_attackDelay >= 1f)
-                    {
-                        _attackDelay = 0;
-                        _attackFlag = true;
-                    }
-                    else if (_attackDelay >= 0.3f)
-                    {
-                        attackArea.SetActive(false);
-                    }
-                }
-
-                if (_attackFlag)
-                {
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        _attackFlag = false;
-                    }
-                }
-                else
-                {
-                    _attackDelay += Time.deltaTime;
-
-                    _animator.SetBool("Attack", true);
-
-                    if (_attackDelay >= 0.6f)
-                    {
-                        _animator.SetBool("Attack", false);
-
-                        _attackFlag = true;
-
-                        Debug.Log("aa");
-
-                        _attackDelay = 0;
-                    }
-                }
+                SceneManager.LoadScene("GameOver");
             }
-            // 死亡
+        }
+
+        if (_hp <= 0)
+        {
+            _animator.SetBool("Dead", true);
+            _dead = true;
+        }
+
+        if (_invincible)
+        {
+            _invincibleCoolTime += Time.deltaTime;
+            _colorTime += Time.deltaTime;
+
+            if (_colorTime >= 0.2f)
+            {
+                _sr.enabled = true;
+                _sr.color = new Color(255f, 255f, 255f);
+            }
+            else if (_colorTime >= 0.1f)
+            {
+                _sr.enabled = false;
+            }
             else
             {
-                deadTime +=Time.deltaTime;
-
-                if(deadTime > 2.0f)
-                {
-                    SceneManager.LoadScene("GameOver");
-                }
+                _sr.color = new Color(255f, 0, 0);
             }
 
-
-            if (_hp <= 0)
+            if (_invincibleCoolTime >= 0.8f)
             {
-                _animator.SetBool("Dead", true);
-                _dead = true;
-            }
-
-            if (_invincible)
-            {
-                _invincibleCoolTime += Time.deltaTime;
-                _colorTime += Time.deltaTime;
-
-                if (_colorTime >= 0.2f)
-                {
-                    _sr.enabled = true;
-                    _sr.color = new Color(255f, 255f, 255f);
-                }
-                else if (_colorTime >= 0.1f)
-                {
-                    _sr.enabled = false;
-                }
-                else
-                {
-                    _sr.color = new Color(255f, 0, 0);
-                }
-
-                if (_invincibleCoolTime >= 0.8f)
-                {
-                    _invincible = false;
-                    _invincibleCoolTime = 0;
-                    _colorTime = 0;
-                }
+                _invincible = false;
+                _invincibleCoolTime = 0;
+                _colorTime = 0;
             }
         }
     }
