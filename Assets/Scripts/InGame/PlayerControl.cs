@@ -192,57 +192,132 @@ public class PlayerControl : MonoBehaviour
                 }
             }
 
-            switch (_modelNumber)
+            // TutorialSceneのみの処理
+            if(SceneManager.GetActiveScene().name == "Tutorial")
             {
-                // ファミコン
-                case 0:
-                    mainCameraColl.enabled = true;
-                    // 左方向
-                    if (_inputX < 0f)
-                    {
-                        cmCamera.Follow = null;
-                    }
-                    // 右方向
-                    else if (_inputX > 0f)
-                    {
-                        Vector2 viewportPoint = mainCamera.WorldToViewportPoint(transform.position);
-                        if (viewportPoint.x > 0.4f && viewportPoint.x < 0.6f)
+                //時代に応じて処理を変化させる。
+                switch (_modelNumber)
+                {
+                    // ファミコン
+                    case 0:
+                        mainCameraColl.enabled = true;
+                        // 左方向
+                        if (_inputX < 0f)
                         {
-                            cmCamera.Follow = this.transform;
+                            cmCamera.Follow = null;
                         }
-                    }
+                        // 右方向
+                        else if (_inputX > 0f)
+                        {
+                            Vector2 viewportPoint = mainCamera.WorldToViewportPoint(transform.position);
+                            if (viewportPoint.x > 0.4f && viewportPoint.x < 0.6f)
+                            {
+                                cmCamera.Follow = this.transform;
+                            }
+                        }
 
-                    famiCom.SetActive(true);
-                    _bc2d.offset = new Vector2(0.05f, -0.05f);
-                    _bc2d.size = new Vector2(0.4f, 0.9f);
+                        famiCom.SetActive(true);
+                        _bc2d.offset = new Vector2(0.05f, -0.05f);
+                        _bc2d.size = new Vector2(0.4f, 0.9f);
 
-                    Application.targetFrameRate = 30;
-                    break;
+                        Application.targetFrameRate = 30;
+                        break;
 
-                // Sega
-                case 1:
-                    mainCameraColl.enabled = false;
-                    famiCom.SetActive(false);
-                    Application.targetFrameRate = 60;
-                    break;
+                    // Sega
+                    case 1:
+                        mainCameraColl.enabled = false;
+                        famiCom.SetActive(false);
+                        Application.targetFrameRate = 60;
+                        break;
 
-                // 3DS
-                case 2:
-                    _bc2d.offset = new Vector2(0.05f, -0.04f);
-                    _bc2d.size = new Vector2(0.5f, 0.8f);
+                    // 3DS
+                    case 2:
+                        _bc2d.offset = new Vector2(0.05f, -0.04f);
+                        _bc2d.size = new Vector2(0.5f, 0.8f);
 
-                    Application.targetFrameRate = 90;
-                    break;
+                        Application.targetFrameRate = 90;
+                        break;
 
-                // Switch
-                case 3:
-                    _bc2d.offset = new Vector2(0.02f, -0.095f);
-                    _bc2d.size = new Vector2(0.4f, 1.15f);
+                    // Switch
+                    case 3:
+                        _bc2d.offset = new Vector2(0.02f, -0.095f);
+                        _bc2d.size = new Vector2(0.4f, 1.15f);
 
-                    Application.targetFrameRate = 120;
-                    break;
+                        Application.targetFrameRate = 120;
+                        break;
+                }
             }
+            else
+            {
+                //時代に応じて処理を変化させる。
+                switch (_modelNumber)
+                {
+                    // ファミコン
+                    case 0:
+                        switch_N.SetActive(false);
+                        famiCom.SetActive(true);
 
+                        if(SceneManager.GetActiveScene().name != "Stage_02" && SceneManager.GetActiveScene().name != "Stage_03")
+                        {
+                            mainCameraColl.enabled = true;
+                            // 左方向
+                            if (_inputX < 0f)
+                            {
+                                cmCamera.Follow = null;
+                            }
+                            // 右方向
+                            else if (_inputX > 0f)
+                            {
+                                Vector2 viewportPoint = mainCamera.WorldToViewportPoint(transform.position);
+                                if (viewportPoint.x > 0.4f && viewportPoint.x < 0.6f)
+                                {
+                                    cmCamera.Follow = this.transform;
+                                }
+                            }
+                        }
+                        
+
+                        famiCom.SetActive(true);
+                        _bc2d.offset = new Vector2(0.05f, -0.05f);
+                        _bc2d.size = new Vector2(0.4f, 0.9f);
+
+                        Application.targetFrameRate = 30;
+                        break;
+
+                    // Sega
+                    case 1:
+                        famiCom.SetActive(false);
+                        sega.SetActive(true);
+
+                        mainCameraColl.enabled = false;
+                        famiCom.SetActive(false);
+                        Application.targetFrameRate = 60;
+                        break;
+
+                    // 3DS
+                    case 2:
+                        sega.SetActive(false);
+                        ds.SetActive(true);
+
+                        _bc2d.offset = new Vector2(0.05f, -0.04f);
+                        _bc2d.size = new Vector2(0.5f, 0.8f);
+
+                        Application.targetFrameRate = 90;
+                        break;
+
+                    // Switch
+                    case 3:
+                        ds.SetActive(false);
+                        switch_N.SetActive(true);
+
+                        _bc2d.offset = new Vector2(0.02f, -0.095f);
+                        _bc2d.size = new Vector2(0.4f, 1.15f);
+
+                        Application.targetFrameRate = 120;
+                        break;
+                }
+            }
+            
             if (_attackFlag)
             {
                 if (Input.GetMouseButtonDown(0))

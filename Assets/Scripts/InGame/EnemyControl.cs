@@ -63,8 +63,10 @@ public class EnemyControl : MonoBehaviour
                     // Tutorialでは無い時
                     if(SceneManager.GetActiveScene().name != "Tutorial")
                     {
+                        // 移動処理。
                         _rb2d.velocity = new Vector2(_moveSpeed, _rb2d.velocity.y);
 
+                        // 向きに応じて画像を反転させる。
                         if (_moveSpeed > 0)
                         {
                             _sr.flipX = true;
@@ -78,14 +80,17 @@ public class EnemyControl : MonoBehaviour
 
                 // 小型ドラゴン
                 case 1:
-                    if(SceneManager.GetActiveScene().name != "Tutorial")
+                    // Tutorialでは無い時
+                    if (SceneManager.GetActiveScene().name != "Tutorial")
                     {
+                        // プレイヤーに向かって移動する処理。
                         _playerPos = FindObjectOfType<PlayerControl>().transform;
                         this.transform.position = Vector2.MoveTowards(this.transform.position, _playerPos.position, _moveSpeed * Time.deltaTime);
-
+                            
                         Vector3 dir = _playerPos.position - this.transform.position;
                         this.transform.rotation = Quaternion.FromToRotation(Vector3.left, dir);
 
+                        // 向きに応じて画像を反転させる。
                         if (this.transform.position.x > _playerPos.transform.position.x)
                         {
                             _sr.flipY = false;
